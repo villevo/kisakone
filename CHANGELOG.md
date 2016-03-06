@@ -6,7 +6,7 @@ Kisakone versions are simply release date tags:
 next:
 =====
   * Fix license help text in addcompetitor. GH #264.
-  * Option to lift players from queue in multiple ways: signup time, rating, random: GH #139.
+  * Option to lift players from queue in multiple ways: signup time, rating, random: GH #139, GH# 265.
 
 2016.03.03:
 ===========
