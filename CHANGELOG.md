@@ -5,7 +5,7 @@ Kisakone versions are simply release date tags:
 
 next:
 =====
-  * 
+  * Fix license help text in addcompetitor. GH #264.
 
 2016.03.03:
 ===========
