@@ -3,6 +3,10 @@ Changelog
 
 Kisakone versions are simply release date tags:
 
+next:
+=====
+  * 
+
 2016.03.03:
 ===========
   * Fix Course Map and Link functionality, along with their allowed max sizes.
