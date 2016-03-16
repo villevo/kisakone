@@ -123,3 +123,38 @@ function SetPlayerDetails($player)
 
     return $player;
 }
+
+function CalculatePlayerHandicap($playerid, $roundtime = '9999-01-01') {
+
+    $maxhcp = 26;
+
+    $rtu = array(0,1,1,1,1,2,2,2,2,3,3,4,4,5,5,6,7,8,9,10);
+    $hcps = array();
+
+    $query = "SELECT Handicap FROM :RoundResultHandicap, :RoundResult, :Event, :Round 
+                WHERE :RoundResultHandicap.RoundResult=:RoundResult.id AND :Round.id=:RoundResult.Round AND :Round.Event=:Event.id 
+                AND Player=".$playerid." AND ResultsLocked < '".$roundtime."' ORDER BY Handicap ASC";
+    $result = db_all($query);
+    foreach ($result as $row) {
+        array_push($hcps,$row['Handicap']);
+    }
+
+    $hcp = 0;
+	
+    // Mikko 27.7.2015: HCP calculation broke after 20 rounds because we started 
+    // to point to rtu[20] when rtu[19] has the last actual rounds to use value
+    // Added -1 to fix this
+    $rtuidx = min(count($hcps),count($rtu) - 1);
+    // Check if no rounds are used (new player), 
+    // otherwise we'll get division by zero later
+    if ($rtuidx === 0) {
+    	return 0;
+    }
+
+    for ($i = 0; $i < $rtu[$rtuidx]; $i++) {
+        $hcp += $hcps[$i];
+    }
+
+    return min(round($hcp/$rtu[$rtuidx]*0.96,2),$maxhcp);
+
+}

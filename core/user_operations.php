@@ -57,8 +57,13 @@ function RegisterPlayer($username, $password, $email, $firstname, $lastname, $ge
     }
     else
         return $err;
-
+    if ($username === null) {
+    	$username = generateUserName($player);
+    }    
     $user = new User(null, $username, USER_ROLE_PLAYER, $firstname, $lastname, $email, $player->id);
+    if ($password === null) {
+    	$password = generateRandomPassword(10);
+    }
     $err = $user->ValidateUser();
     if (!isset($err)) {
         if ($user->username !== null) {
@@ -77,4 +82,35 @@ function RegisterPlayer($username, $password, $email, $firstname, $lastname, $ge
         return $err;
 
     return $user;
+}
+
+function generateRandomPassword($length = 10) {
+	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	$charactersLength = strlen($characters);
+	$randomString = '';
+	for ($i = 0; $i < $length; $i++) {
+		$randomString .= $characters[rand(0, $charactersLength - 1)];
+	}
+	return $randomString;
+}
+
+function generateUserName($player) {
+	$generated_username = mb_substr($player->firstname, 0, 3, 'UTF-8') . mb_substr($player->lastname, 0, 5, 'UTF-8') . $player->id;
+	$generated_username = normalize_username($generated_username);
+	return $generated_username;
+}
+
+/** Normalize a string so that it can be compared with others without being too fussy.
+ *   e.g. "Ádrèñålînë" would return "adrenaline"
+ *   Note: Some letters are converted into more than one letter,
+ *   e.g. "ß" becomes "sz", or "ä" becomes "ae"
+ *   
+ *   This is from: http://stackoverflow.com/questions/11354195/issues-replacing-special-characters-in-php-string
+ */
+function normalize_username($string) {
+	// remove whitespace, leaving only a single space between words.
+	$string = preg_replace('/\s+/', ' ', $string);
+	// flick diacritics off of their letters
+	$string = preg_replace('~&([a-z]{1,2})(?:acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml|caron);~i', '$1', htmlentities($string, ENT_COMPAT, 'UTF-8'));
+	return $string;
 }

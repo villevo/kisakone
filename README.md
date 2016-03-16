@@ -4,34 +4,45 @@ Kisakone
 Kisakone is [Finnish Disc Golf Associations (Suomen frisbeegolfliitto ry)](http://frisbeegolfliitto.fi/)
 disc golf tournament management software, which powers all the sanctioned disc golf events in Finland.
 
-Live version is running at [Kisakone](https://kisakone.frisbeegolfliitto.fi/) along with many copies operated by
-local disc golf clubs in Finland.
+This fork is intended for disc golf club use. Code for handicapped competitions etc. has been developed during 2012-2015, 
+but code hasn't been generally available. In March 2016 Tuminoid's head codes were forked and old changes
+were merged here to make it available for all and easen future development.
+
+Basic testing has been done for this fork, but it still needs some testing. This fork is not in use yet even
+at [Jyli Kisakone](http://jyli.fi/kisakone)
+
+Main differences comapred to official Kisakone:
+
+- Handicap calculation and handicapped results
+-- Rating and slope values for courses
+-- A handicap is calculated from each round result
+-- Handicapped results are shown in results
+- Some changes to help local competition organization
+-- User/competitor addition without sfl or pdga integrations
+-- Usernames are automatically created for TD-added competitors, usernames may also be changed
+-- User listing available for all to show handicaps (some details visible only for admin users)
+-- Handicaps are used to resolve ties in leaderboard
 
 
 Installation
 ============
 
-See [INSTALL](https://github.com/tuminoid/kisakone/blob/master/doc/install/INSTALL.md). LAMP setup is required,
-but Kisakone has very limited dependencies. Mainly few PHP modules.
-Apache is supported by default, but you can run Kisakone with Nginx + HHVM if you like.
+See [Tuminoid's instructions](https://github.com/tuminoid/kisakone).
 
+RoundResultHandicap and CourseRating tables are automatically added
 
 Upgrading
 =========
 
-You can upgrade by doing a `git fetch` followed by `git checkout <version you want>` AND then executing upgrade steps,
-in order, up to the version to chose to upgrade to. See
-[UPGRADE.md](https://github.com/tuminoid/kisakone/blob/master/doc/upgrade/UPGRADE.md)
+See [Tuminoid's instructions](https://github.com/tuminoid/kisakone).
 
-List of ugprades that require additional steps is available at
-[upgrade](https://github.com/tuminoid/kisakone/tree/master/doc/upgrade) directory.
+Upgrade scripts for different versions of this fork are not yet available. But added tables have not
+been changed from older versions (distributed for interested parties in various ways...) so you propably
+can run official upgrades if you wish altough upgrades have not been tested properly.
 
 
 Development
 ===========
-
-Bleeding edge version is at branch called `next`. `master` aims to be stable and is usually updated when there
-is a new release, along with a release tag. Release tags are the ones you want to use for production.
 
 For development, clone [kisakone-dev](https://github.com/tuminoid/kisakone-dev) at same directory level as `kisakone`.
 There is ready-made setup for Vagrant VM, usable for local development.
@@ -58,3 +69,12 @@ Current list of requirements and frameworks in use:
  - [AddThisEvent](http://www.addthisevent.com/) widgets
  - [Google Analytics](http://www.google.com/analytics/) support
  - [TrackJS](http://www.trackjs.com/) support
+ 
+ Future
+===========
+
+A completely new player level and handicap method is under development. It will be based on PDGA ratings type 
+of calculation. These features will most likely be developed ready in April 2016 so stay tuned!
+
+The new calculation is better because we don't need rating and slope values for courses and calculation
+makes more sense when shorter courses are used.

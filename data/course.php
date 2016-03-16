@@ -63,8 +63,7 @@ function GetCourses()
 function GetCourseDetails($id)
 {
     $id = esc_or_null($id, 'int');
-
-    return db_one("SELECT id, Name, Description, Link, Map, Event FROM :Course WHERE id = $id");
+    return db_one("SELECT :Course.id AS id, Name, Description, Link, Map, Event, Rating, Slope FROM :Course LEFT JOIN :CourseRating on :Course.id=Course WHERE :Course.id = $id");
 }
 
 
@@ -89,6 +88,31 @@ function SaveCourse($course)
                             VALUES ($name, $description, $link, $map, $eventid)");
 }
 
+/*HCP*/
+function SaveCourseRating($id,$course) {
+
+    if ($course['Rating'] > 0 && $course['Slope'] > 0) {
+
+		$rating = $course['Rating'];
+		$slope = $course['Slope'];
+		
+		$query = format_query("SELECT id FROM :CourseRating WHERE Course = $id");
+		$result = db_all($query);
+		
+		if (count($result) > 0) {
+			$query = format_query("UPDATE :CourseRating
+					SET Rating = $rating, Slope = $slope
+					WHERE Course = $id");
+			$result = db_exec($query);	
+		} else {
+			$query = format_query("INSERT INTO :CourseRating (Course,Rating,Slope )
+					VALUES ($id,$rating,$slope)");
+			$result = db_exec($query);
+			if (!$result)
+				return Error::Query($query);		
+		}
+    }
+}
 
 function DeleteCourse($id)
 {

@@ -40,6 +40,11 @@
         {formerror field='lastname'}
     </div>
     <div>
+        <label for="username">{translate id='user_username'}</label>
+        <input id="username" type="text" name="username" value="{$userdata->username|escape}" />
+        {formerror field='username'}
+    </div>    
+    <div>
         <label for="email">{translate id='reg_email'}</label>
         <input id="email" type="text" name="email" value="{$userdata->email|escape}" />
         <input type="hidden" name="email_old" value="{$userdata->email|escape}" />

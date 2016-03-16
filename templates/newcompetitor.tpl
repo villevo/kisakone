@@ -36,31 +36,35 @@
 <p class="error">{translate id=$sfl_error}</p>
 {/if}
 
-{if !$id_entered || $sfl_error}
+{if ($integrations_enabled) && (!$id_entered || $sfl_error)}
 <form method="post" class="evenform" id="regform">
     <input type="hidden" name="formid" value="new_competitor" />
 
     <h2>{translate id=form_search_competitor}</h2>
+    {if $pdga_enabled}
     <div>
         <label for="pdga">{translate id=pdga_number}</label>
         <input id="pdga" type="text" name="pdga_preview" />
         {formerror field='pdga'}
     </div>
+    {/if}
+    {if $sfl_enabled}
     <div style="padding-left: 300px;">
         {translate id=or}
     </div>
+    {/if}
+    {if $sfl_enabled}
     <div>
         <label for="sflid">{translate id=sfl_number}</label>
         <input id="sflid" type="text" name="sflid_preview" />
         {formerror field='sflid'}
     </div>
-
+	{/if}
     <div>
         <input type="submit" value="{translate id=search}" name="search" />
         <input type="submit" value="{translate id=cancel}" name="cancel" />
     </div>
 </form>
-
 {else}
 
 <form method="post" class="evenform" id="regform">
@@ -69,43 +73,57 @@
     <h2>{translate id='reg_contact_info'}</h2>
     <div>
         <label for="firstname">{translate id='first_name'}</label>
-        <input type="text" id="firstname" name="firstname" value="{$firstname|escape}" disabled="disabled" />
+        <input type="text" id="firstname" name="firstname" value="{$firstname|escape}" {if $id_entered} disabled="disabled" {/if} />
+        {if $id_entered}
         <input type="hidden" name="firstname" value="{$firstname|escape}" />
+        {/if}
         {formerror field='firstname'}
     </div>
     <div>
         <label for="lastname">{translate id='last_name'}</label>
-        <input id="lastname" type="text" name="lastname" value="{$lastname|escape}" disabled="disabled" />
+        <input id="lastname" type="text" name="lastname" value="{$lastname|escape}" {if $id_entered} disabled="disabled" {/if} />
+        {if $id_entered}
         <input type="hidden" name="lastname" value="{$lastname|escape}" />
+        {/if}
         {formerror field='lastname'}
     </div>
     <div>
         <label for="email">{translate id='reg_email'}</label>
-        <input id="email" type="text" name="email" value="{$email|escape}" {if !$edit_email}disabled="disabled"{/if} />
+        <input id="email" type="text" name="email" value="{$email|escape}" {if !$edit_email && $id_entered}disabled="disabled"{/if}  />
+        {if $id_entered}
         {if !$edit_email}<input type="hidden" name="email" value="{$email|escape}" />{/if}
+        {/if}
         {formerror field='email'}
     </div>
 
     <h2>{translate id='reg_player_info'}</h2>
     <div>
         <label for="pdga">{translate id='pdga_number'}</label>
-        <input id="pdga" type="text" name="pdga" value="{$pdga|escape}" disabled="disabled" />
+        <input id="pdga" type="text" name="pdga" value="{$pdga|escape}" {if $id_entered} disabled="disabled" {/if} />
+        {if $id_entered}
         <input type="hidden" name="pdga" value="{$pdga|escape}" />
+        {/if}
         {formerror field='pdga'}
     </div>
 
     <div>
         <label for="gender">{translate id='gender'}</label>
-        <input id="gender_m" type="radio" disabled="disabled" {if $gender == 'M'}checked="checked"{/if} name="gender" value="male" /> {translate id="male"} &nbsp;&nbsp;
-        <input id="gender_f" type="radio" disabled="disabled" {if $gender == 'F'}checked="checked"{/if} name="gender" value="female" /> {translate id="female"}
+        <input id="gender_m" type="radio" {if $id_entered} disabled="disabled" {/if} {if $gender == 'M'}checked="checked"{/if} name="gender" value="male" /> {translate id="male"} &nbsp;&nbsp;
+        <input id="gender_f" type="radio" {if $id_entered} disabled="disabled" {/if} {if $gender == 'F'}checked="checked"{/if} name="gender" value="female" /> {translate id="female"}
+        {if $id_entered}
         <input type="hidden" name="gender" value="{if $gender == 'M'}male{/if}{if $gender == 'F'}female{/if}" />
+        {/if}
     </div>
 
     <div style="margin-top: 8px">
         <label>{translate id='dob'}</label>
         {translate id='year_default' assign='year_default'}
-        <input type="text" name="dob_Year" value="{$birthyear|escape}" disabled="disabled" />
+        {html_select_date time='1980-1-1' field_order=DMY month_format=%m
+            prefix='dob_' start_year='1900' display_months=false display_days=false year_empty=$year_default month_empty=$month_default day_empty=$day_default field_separator=" "
+            all_extra='style="min-width: 0"' }
+        {if $id_entered}
         <input type="hidden" name="dob_Year" value="{$birthyear|escape}" />
+        {/if}
         {formerror field='dob'}
     </div>
 
@@ -120,7 +138,12 @@
 //<![CDATA[
 {literal}
 $(document).ready(function(){
+    CheckedFormField('regform', 'lastname', NonEmptyField, null);
+    CheckedFormField('regform', 'firstname', NonEmptyField, null);
     CheckedFormField('regform', 'email', EmailField, null);
+    CheckedFormField('regform', 'gender', RadioFieldSet, null);
+    CheckedFormField('regform', 'dob_Year', NonEmptyField, null);
+    
     $("#cancelButton").click(CancelSubmit);
 });
 

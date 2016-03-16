@@ -110,6 +110,7 @@
                 {foreach from=$rounds key=index item=round}
                     {math assign=roundNumber equation="x+1" x=$index}
                     <th>{translate id=round_number_short number=$roundNumber}</th>
+                    <th>HCP{$roundNumber}</th>
                 {/foreach}
                 <th>{translate id=leaderboard_hole}</th>
                 <th>+/-</th>
@@ -141,6 +142,7 @@
                 {assign var=rresult value=$result.Results.$roundid.Total}
                 {if !$rresult}{assign var=rresult value=0}{/if}
                 <td id="r{$result.PlayerId}_{$hr_id}">{$rresult}</td>
+                <td>{$result.Results.$roundid.RoundedHandicap} ({$result.Results.$roundid.CalculatedHandicap})</td>
             {/foreach}
 
             <td id="r{$result.PlayerId}_tc">{$result.TotalCompleted}</td>
@@ -161,4 +163,94 @@
     {/foreach}
 {/foreach}
 </table>
+
+<!-- Jyli Handicap: Show Handicapped results -->
+<br />
+<h2>{translate id=handicapped_results}</h2>
+
+<table class="results ">
+{foreach from=$resultsByClassHCP key=class item=results}
+    <tr style="border: none">
+        {math assign=colspan equation="5+x" x=$numRounds}
+        <td colspan="{$colspan}" style="background-color: white" class="leftside">
+            <a name="c{$class}"></a>
+            <h3>{$class|escape}</h3>
+        </td>
+    </tr>
+    {counter assign=rowind start=-1}
+    {foreach from=$results item=result}
+        {counter assign=rowind}
+
+        {if $rowind == 0}
+            <tr>
+                <td style="height: 8px; background-color: white;"></td>
+            </tr>
+
+            <tr class="thr">
+                <th>{translate id=result_pos}</th>
+                <th>{translate id=result_name}</th>
+                {if $sfl_enabled}
+                <th>{translate id=clubname}</th>
+                {/if}
+                <th>PDGA</th>
+                {if $pdga_enabled}
+                <th>{translate id=pdga_rating}</th>
+                {/if}
+                {foreach from=$rounds key=index item=round}
+                    {math assign=roundNumber equation="x+1" x=$index}
+                    <th>{translate id=round_number_short number=$roundNumber}</th>
+                    <th>HCP{$roundNumber}</th>
+                {/foreach}
+                <th>{translate id=leaderboard_hole}</th>
+                <th>+/-</th>
+                <th>{translate id=result_cumulative}</th>
+                {if $includePoints}
+                <th>{translate id=result_tournament}</th>
+                {/if}
+            </tr>
+            <tr>
+                <td style="height: 8px; background-color: white;"></td>
+            </tr>
+        {/if}
+
+        {assign var=country value=$result.PDGACountry}
+        {if !$country}{assign var=country value='FI'}{/if}
+        <tr class="resultrow">
+            <td id="r{$result.PlayerId}_pos">{$result.HCPStanding}</td>
+            <td class="leftside"><span class="flag-icon flag-icon-{$country|lower}"></span>{$result.FirstName|escape|replace:' ':'&nbsp;'}&nbsp;{$result.LastName|escape|replace:' ':'&nbsp;'}</td>
+            {if $sfl_enabled}
+            <td>{$result.ClubName|escape}</td>
+            {/if}
+            <td>{$result.PDGANumber|escape}</td>
+            {if $pdga_enabled}
+            <td>{$result.Rating|escape}</td>
+            {/if}
+
+            {foreach from=$rounds item=round key=index}
+                {assign var=roundid value=$round->id}
+                {assign var=rresult value=$result.Results.$roundid.Total}
+                {if !$rresult}{assign var=rresult value=0}{/if}
+                <td id="r{$result.PlayerId}_{$hr_id}">{$rresult}</td>
+                <td>{$result.Results.$roundid.RoundedHandicap} ({$result.Results.$roundid.CalculatedHandicap})</td>
+            {/foreach}
+
+            <td id="r{$result.PlayerId}_tc">{$result.TotalCompleted}</td>
+
+            <td id="r{$result.PlayerId}_pm">{if $result.DidNotFinish}DNF{else}{$result.TotalPlusminusHCP}{/if}</td>
+            <td id="r{$result.PlayerId}_t">{if $result.DidNotFinish}DNF{else}{$result.HandicappedTotal}{/if}</td>
+            {if $includePoints}
+            <td id="r{$result.PlayerId}_tp">
+                {assign var=tournamentPoints value=$result.TournamentPoints}
+                {if !$tournamentPoints}{assign var=tournamentPoints value=0}{/if}
+                {math equation="x/10" x=$tournamentPoints}
+            </td>
+            {/if}
+            {if $result.Results.$roundid.SuddenDeath}
+            <td id="r{$result.PlayerId}_p" class="sdtd sd">{translate id=result_sd_panel}</td>
+            {/if}
+        </tr>
+    {/foreach}
+{/foreach}
+</table>
+<!-- Jyli Handicap end -->
 {/if}

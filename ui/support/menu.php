@@ -29,8 +29,8 @@ function page_initializeMainMenu()
 {
     $mainmenu = array(array('title' => 'events', 'url' => 'events'), array('title' => 'tournaments', 'url' => 'tournaments'));
 
-    if (IsAdmin()) {
-        $mainmenu[] = array('title' => 'users', 'url' => 'users');
+    $mainmenu[] = array('title' => 'users', 'url' => 'users');
+    if (IsAdmin()) {        
         $mainmenu[] = array('title' => 'administration', 'url' => 'admin');
     }
 

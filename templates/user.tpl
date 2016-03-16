@@ -49,6 +49,10 @@
          <td>{translate id=user_yearofbirth}: </td>
          <td>{$player->birthyear|escape}</td>
       </tr>
+      <tr>
+         <td>{translate id=users_hcp}: </td>
+         <td>{$player->hcp|escape}</td>
+      </tr>      
    {else}
       <tr><td colspan="2">
          {translate id=user_not_player}

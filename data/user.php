@@ -174,23 +174,39 @@ function GetUserPlayer($userid)
     if (empty($row))
         return null;
 
-    return new Player($row['id'], $row['PDGANumber'], $row['Sex'],
+    $retValue = new Player($row['id'], $row['PDGANumber'], $row['Sex'],
                     $row['YearOfBirth'], $row['firstname'], $row['lastname'], $row['email']);
+    $retValue->hcp = number_format(CalculatePlayerHandicap($row['id'],'9999-01-01'),1,'.','');
+    return $retValue;
 }
 
 
 // Edits users user and player information
-function EditUserInfo($userid, $email, $firstname, $lastname, $gender, $pdga, $dobyear)
+// If username is given, username will be saved. If null or missing username, username will not be updated.
+function EditUserInfo($userid, $email, $firstname, $lastname, $gender, $pdga, $dobyear, $username = null)
 {
     $uid = esc_or_null($userid, 'int');
     $email = esc_or_null($email, 'string');
     $firstname = esc_or_null(data_fixNameCase($firstname));
     $lastname = esc_or_null(data_fixNameCase($lastname));
+    
+    if (!is_null($username)) {
+    	$username = esc_or_null($username);
+    }
+    
+    $result = null;
+    
+    if (!is_null($username)) {
+    	$result = db_exec("UPDATE :User
+    				SET UserEmail = $email, UserFirstName = $firstname, UserLastName = $lastname, Username = $username
+    				WHERE id = $uid");
+    } else {    
 
-    $result = db_exec("UPDATE :User
-                        SET UserEmail = $email, UserFirstName = $firstname, UserLastName = $lastname
-                        WHERE id = $uid");
-
+    	$result = db_exec("UPDATE :User
+                 	SET UserEmail = $email, UserFirstName = $firstname, UserLastName = $lastname
+                    WHERE id = $uid");
+    }
+    
     if (db_is_error($result))
         return $result;
 

@@ -51,6 +51,27 @@ function data_string_in_array($string, $array)
     return false;
 }
 
+function data_sort_hcp($a,$b) {
+	if($a['DidNotFinish'] == 1) return 1;
+	// if tie, we need lots of checks	
+	if($a['HandicappedTotal'] == $b['HandicappedTotal']) {
+		// if same rounded handicap, we need to check calculated (with a decimal) handicap
+		if ($a['RoundedHandicap'] == $b['RoundedHandicap']) {
+			// even calculated is same, this really is a tie...
+			if($a['CalculatedHandicap'] == $b['CalculatedHandicap']) return 0;				
+			// phew, calculated was different, in these cases higher wins
+			if ($a['CalculatedHandicap'] > $b['CalculatedHandicap']) return -1;
+		} else {			
+			// different rounded handicap, lowest wins
+			if ($a['RoundedHandicap'] < $b['RoundedHandicap']) return -1;
+		}
+		 
+	} else {
+		if ($a['HandicappedTotal'] < $b['HandicappedTotal']) return -1;
+	}	
+	return 1;
+}
+
 function data_sort_leaderboard($a, $b)
 {
     $ac = $a['Classification'];
@@ -89,6 +110,18 @@ function data_sort_leaderboard($a, $b)
                 return - 1;
             return 1;
         }
+    }
+    
+    // If no differences in results detected,
+    // use calculated handicap to sort. Higher
+    // handicap wins because has better round compared 
+    // to handicap.    
+    $ahcp = $a['CalculatedHandicap'];
+    $bhcp = $b['CalculatedHandicap'];
+    if ($ahcp != $bhcp) {
+    	if ($ahcp > $bhcp)
+    		return - 1;
+    	return 1;
     }
 
     $as = $ar[$keys[0]]['StartId'];

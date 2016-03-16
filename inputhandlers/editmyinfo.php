@@ -59,6 +59,17 @@ function processForm()
     $firstname = $_POST['firstname'];
     if ($firstname == '')
         $problems['firstname'] = translate('FormError_NotEmpty');
+    
+    // $user_username named variable used here, because above user id uses $username var name...
+    $user_username = (string) @$_POST['username'];
+
+    if (!User::IsValidUsername($user_username))
+        $problems['username'] = translate('FormError_InvalidUsername', array('username' => $user_username));
+    
+    // Check that no other user has the same username
+    $foundUserId = GetUserId($user_username);    
+    if (!is_null($foundUserId) && $foundUserId !== $uid)
+        $problems['username'] = translate('FormError_DuplicateUsername', array('username' => $user_username));   
 
     $email = $_POST['email'];
     if (!preg_match('/^.+@.+\..+$/', $email))
@@ -102,7 +113,7 @@ function processForm()
         return $error;
     }
 
-    $result = EditUserInfo($uid, $email, $firstname, $lastname, $gender, $pdga, $dobYear);
+    $result = EditUserInfo($uid, $email, $firstname, $lastname, $gender, $pdga, $dobYear, $user_username);
     if (!is_a($result, 'Error')) {
         if (!$username) {
             $user->birthyear = $dobYear;
@@ -111,10 +122,11 @@ function processForm()
             $user->firstname = $firstname;
             $user->fullname = $firstname . ' ' . $lastname;
             $user->email = $email;
+            $user->username = $user_username;
         }
 
         if (@$_GET['id'])
-            redirect(url_smarty(array('page' => 'user', 'id' => $_GET['id']), $user));
+            redirect(url_smarty(array('page' => 'user', 'id' => $user_username), $user));
         elseif ($email != $email_old && GetConfig(EMAIL_VERIFICATION)) {
             $user->SetEmailVerified(false);
             $user->SendEmailVerificationEmail();

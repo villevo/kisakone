@@ -44,6 +44,11 @@ function processForm()
     $course['Map'] = $_POST['map'];
     $course['Description'] = $_POST['description'];
 
+    /* HCP */
+    $course['Rating'] =(int)  $_POST['rating'];
+    $course['Slope'] = (int) $_POST['slope'];
+
+
     if (@$_GET['id'] != 'new') {
         $course['id'] = $_GET['id'];
         $id = (int) @$_GET['id'];
@@ -70,6 +75,8 @@ function processForm()
             }
         }
         SaveCourse($course);
+	/*HCP*/
+	SaveCourseRating($course['id'],$course);
     }
     else {
         if (!IsAdmin()) {
@@ -86,6 +93,8 @@ function processForm()
 
         $course['id'] = null;
         $id = SaveCourse($course);
+	/*HCP*/
+        SaveCourseRating($id,$course);
     }
 
     if (is_a($id, 'Error'))

@@ -284,7 +284,7 @@ function GetEventOfficials($event)
 // Edit event information
 function EditEvent($eventid, $name, $club, $venuename, $duration, $playerlimit, $contact, $tournament,
     $level, $start, $signup_start, $signup_end, $state, $requireFees, $pdgaid)
-{
+{	
     $venueid = GetVenueId($venuename);
     $activation = ($state == 'active' || $state == 'done') ? time() : 'NULL';
     $locking = ($state == 'done') ? time() : 'NULL';
@@ -302,13 +302,39 @@ function EditEvent($eventid, $name, $club, $venuename, $duration, $playerlimit, 
     $pdgaid = esc_or_null($pdgaid, 'int');
     $club = esc_or_null($club, 'int');
 
-    return db_exec("UPDATE :Event
+    db_exec("UPDATE :Event
                             SET Venue = $venueid, Tournament = $tournament, Level = $level, Name = $name, Date = FROM_UNIXTIME($start),
                                 Duration = $duration, PlayerLimit = $playerlimit, Club = $club,
                                 SignupStart = FROM_UNIXTIME($signup_start), SignupEnd = FROM_UNIXTIME($signup_end),
                                 ActivationDate = FROM_UNIXTIME($activation), ResultsLocked = FROM_UNIXTIME($locking),
                                 ContactInfo = $contact, LicensesRequired = $requireFees, PdgaEventId = $pdgaid
                             WHERE id = $eventid");
+ 
+    /*HCP*/
+    if ($state =='done') {
+      // (re-)calculate roundresult handicaps when event is closed 
+      $result = db_all("SELECT :RoundResult.id, DidNotFinish, Course, Result FROM :RoundResult,:Round,:Event WHERE Round=:Round.id and :Round.Event= $eventid");
+
+      foreach ($result as $row) {
+
+	  	$dnf = $row['DidNotFinish'];
+	  	$course = $row['Course'];
+	  	$id = $row['id'];
+
+       	if ($dnf == 1) continue;
+
+       	$row2 = db_one("select Rating,Slope from :CourseRating where Course = $course");
+       	
+       	if (!isset($row2['Rating']) || $row2['Rating']==0) { 
+            continue; 
+      	}
+
+   		$hcp = number_format(($row['Result']-$row2['Rating'])*80/$row2['Slope'],12,'.','');
+
+      	$del = db_exec("delete from :RoundResultHandicap where RoundResult=$id");
+      	$ins = db_exec("insert into :RoundResultHandicap (RoundResult,Handicap) values ($id,$hcp)");
+	}
+  }
 }
 
 
@@ -565,6 +591,19 @@ function GetEventResults($eventid)
     return $retValue;
 }
 
+function GetEventResultsWithoutHolesHCP($eventid) {
+	$retValue=GetEventResultsWithoutHoles($eventid);
+	usort($retValue,'data_sort_hcp');
+	return $retValue;
+}
+
+function find_row($arr,$id){
+	for ($i=0; $i < count($arr); $i++) {
+		if ($arr[$i]['id']==$id) return $i;
+	}
+	return -1;
+}
+
 
 function GetEventResultsWithoutHoles($eventid)
 {
@@ -577,7 +616,8 @@ function GetEventResultsWithoutHoles($eventid)
                             :Classification.Short AS ClassName, PlusMinus, :StartingOrder.id AS StartId,
                             TournamentPoints, :Round.id AS RoundId, :Participation.Standing,
                             :Club.ShortName AS ClubName, :Club.Name AS ClubLongName,
-                            :RoundResult.DidNotFinish AS DNF, :PDGAPlayers.country AS PDGACountry
+                            :RoundResult.DidNotFinish AS DNF, :PDGAPlayers.country AS PDGACountry,
+    						:Round.StartTime, Level
                         FROM :Round
                         INNER JOIN :Event ON :Round.Event = :Event.id
                         INNER JOIN :Section ON :Section.Round = :Round.id
@@ -604,19 +644,48 @@ function GetEventResultsWithoutHoles($eventid)
             if ($lastrow)
                 $retValue[] = $lastrow;
 
-            $lastrow = $row;
-            $lastrow['Results'] = array();
-            $lastrow['TotalCompleted'] = 0;
-            $lastrow['TotalPlusminus'] = 0;
-        }
+         	$lastrow = $row;
+          	$lastrow['Results'] = array();
+          	$lastrow['TotalCompleted'] = 0;
+          	$lastrow['TotalPlusminus'] = 0;
+          	$lastrow['HandicappedTotal'] = 0;
+          	$lastrow['TotalPlusminusHCP'] = 0;
+       	}                        
+            
+       	$row['CalculatedHandicap'] = number_format(CalculatePlayerHandicap($row['PlayerId'],$row['StartTime']),1,'.','');
+       	$row['RoundedHandicap'] = round($row['CalculatedHandicap'],0);
+       	$lastrow['HandicappedTotal'] += $row['Total']-$row['RoundedHandicap'];
+       	$lastrow['CalculatedHandicap'] = $row['CalculatedHandicap'];
+       	$lastrow['RoundedHandicap'] = $row['RoundedHandicap'];
+       	$lastrow['TotalCompleted'] += $row['Completed'];
+       	$lastrow['TotalPlusminus'] += $row['PlusMinus'];
+       	$lastrow['TotalPlusminusHCP'] += $row['PlusMinus']-round($row['CalculatedHandicap'],0);
+       	$lastrow['Results'][$row['RoundId']] = $row;
+   	}
 
-        $lastrow['TotalCompleted'] += $row['Completed'];
-        $lastrow['TotalPlusminus'] += $row['PlusMinus'];
-        $lastrow['Results'][$row['RoundId']] = $row;
-    }
-
-    if ($lastrow)
-        $retValue[] = $lastrow;
+   	if ($lastrow)
+    	$retValue[] = $lastrow;
+    
+    $hcpsorted=$retValue;
+    usort($hcpsorted,'data_sort_hcp');
+    
+    // Set standings for hcp results
+    $standings = array();    
+    for ($i=0; $i < count($hcpsorted); $i++) {
+    	$row = find_row($retValue, $hcpsorted[$i]['id']);
+    	if (!isset($standings[$hcpsorted[$i]['ClassName']])) {
+    		$standings[$hcpsorted[$i]['ClassName']] = 1;
+    	} else {
+    		$standings[$hcpsorted[$i]['ClassName']]++;
+    	}
+    	
+    	if ($i > 0 && $hcpsorted[$i]['HandicappedTotal'] == $hcpsorted[$i-1]['HandicappedTotal']) {
+    		$retValue[$row]['HCPStanding'] = $retValue[$prevrow]['HCPStanding'];
+    	} else {
+    		$retValue[$row]['HCPStanding'] = $standings[$hcpsorted[$i]['ClassName']];
+    	}
+    	$prevrow=$row;
+    }    
 
     usort($retValue, 'data_sort_leaderboard');
     return $retValue;

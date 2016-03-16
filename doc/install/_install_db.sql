@@ -540,3 +540,26 @@ CREATE TABLE :PDGAEvents
     INDEX(country)
 ) ENGINE=InnoDB;
 SHOW WARNINGS;
+
+CREATE TABLE :CourseRating 
+(
+  	id INT NOT NULL AUTO_INCREMENT,
+  	Course INT DEFAULT NULL,
+  	Rating INT DEFAULT NULL,
+  	Slope INT DEFAULT NULL,
+  	PRIMARY KEY (id),
+  	UNIQUE KEY(Course),
+  	INDEX(Course)
+) ENGINE=InnoDB;
+SHOW WARNINGS;
+
+CREATE TABLE :RoundResultHandicap 
+(
+  id int(11) NOT NULL AUTO_INCREMENT,
+  RoundResult INT NOT NULL,
+  Handicap DOUBLE DEFAULT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY(RoundResult),
+  INDEX(RoundResult)
+) ENGINE=InnoDB;
+SHOW WARNINGS;

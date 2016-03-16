@@ -28,11 +28,14 @@
  */
 function InitializeSmartyVariables(&$smarty, $error)
 {
-    if (!IsAdmin())
+    /* Users view made available for all, some data shown only for admins in users.tpl 
+	if (!IsAdmin())
         return Error::AccessDenied();
-
+	*/
+	
     $users = GetUsers(@$_GET['search'], @$_GET['sort']);
     $smarty->assign('users', $users);
+    $smarty->assign('isadmin', IsAdmin());
 }
 
 /**

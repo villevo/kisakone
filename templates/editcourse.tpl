@@ -81,15 +81,21 @@ tinyMCE.init({ldelim}
                 <td>{translate id=map_link}</td>
                 <td><input type="text" name="link" value="{$course.Link|escape}" /></td>
             </tr>
-        </table>
+            <tr>
+                <td>Rating</td>
+                <td><input type="text" name="rating" value="{$course.Rating|escape}" /></td>
+            </tr>
+            <tr>
+                <td>Slope</td>
+                <td><input type="text" name="slope" value="{$course.Slope|escape}" /></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <p>{translate id=description}</p>
+                    <textarea cols="80" rows="25" name="description">{$course.Description|escape}</textarea>
+                </td>
+            </tr>
 
-        <div>
-            <h2>{translate id=description}</h2>
-            <textarea cols="80" rows="25" name="description">{$course.Description|escape}</textarea>
-        </div>
-
-        <h2>{translate id=holes_list}</h2>
-        <table class="narrow">
             <tr>
                 <td>
                     <table class="narrow">

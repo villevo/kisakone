@@ -249,6 +249,7 @@ function InitializeSmartyVariables(&$smarty, $error)
             $view = 'leaderboard';
             $results_tmp = GetEventResultsWithoutHoles($event->id);
             $results = pdr_GroupByClasses($results_tmp);
+            $results2 = pdr_GroupByClasses(GetEventResultsWithoutHolesHCP($event->id));
 
             $scoresAssigned = null;
             foreach ($results as $class) {
@@ -261,6 +262,7 @@ function InitializeSmartyVariables(&$smarty, $error)
 
             $smarty->assign('includePoints', $scoresAssigned && $event->tournament);
             $smarty->assign('resultsByClass', $results);
+            $smarty->assign('resultsByClassHCP', $results2);
             $rounds = $event->GetRounds();
             $smarty->assign('rounds', $rounds);
             $smarty->assign('numRounds', count($rounds));

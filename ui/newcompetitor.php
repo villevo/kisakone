@@ -47,6 +47,9 @@ function InitializeSmartyVariables(&$smarty, $error)
     $smarty->assign('id_entered', $pdga || $sflid);
     $smarty->assign('fail', @$_GET['fail']);
 
+    $smarty->assign('pdga_enabled', pdga_enabled());
+    $smarty->assign('sfl_enabled', sfl_enabled());
+    $smarty->assign('integrations_enabled', pdga_enabled() || sfl_enabled());
     if ($pdga && pdga_enabled())
         return pdga_competitor($smarty, $pdga);
     if ($sflid && sfl_enabled())

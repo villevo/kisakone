@@ -37,7 +37,10 @@
    <tr>
       <th>{sortheading field=name id=users_name sortType=alphabetical}</th>
       <th>{sortheading field=pdga id=users_pdga sortType=integer}</th>
+      {if $isadmin}
       <th>{sortheading field=Username id=users_id sortType=alphabetical}</th>
+      {/if}
+      <th>{sortheading field=hcp id=users_hcp sortType=integer}</th>
 
    </tr>
 
@@ -54,7 +57,10 @@
         <td><a href="{$url}">{$user->firstname|escape} {$user->lastname|escape}</a></td>
 
          <td>{$player->pdga|escape}</td>
+         {if $isadmin}
          <td><a href="{$url}">{$user->username|escape}</a></td>
+         {/if}
+         <td>{$player->hcp}</td>
 
      </tr>
    {/foreach}

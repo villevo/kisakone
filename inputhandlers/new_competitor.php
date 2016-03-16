@@ -92,7 +92,7 @@ function processForm()
     if (count($problems)) {
         $error = new Error();
         $error->title = 'Add_Competitor form error';
-        $error->function = 'InputProcessing:Add_Competitor:processForm';
+        $error->function = 'InputProcessing:New_Competitor:processForm';
         $error->cause = array_keys($problems);
         $error->data = $problems;
 
@@ -103,5 +103,6 @@ function processForm()
     if (is_a($u, 'Error'))
         return $u;
 
-    redirect("Location: " . url_smarty(array('page' => 'addcompetitor', 'id' => $eventid, 'signup' => 1), $_GET));
+    // redirect("Location: " . url_smarty(array('page' => 'addcompetitor', 'id' => $eventid, 'signup' => 1), $_GET));
+    redirect("Location: " . url_smarty(array('page' => 'addcompetitor', 'id' => $eventid, 'user' => $u->id), $_GET));
 }
