@@ -50,6 +50,7 @@ function InitializeSmartyVariables(&$smarty, $error)
 
     $smarty->assign('userinfo', $user);
     $smarty->assign('player', $player);
+	 $smarty->assign('user_club_data', GetClub($player->clubid) );
 
     $itsme = $user->username == @$_SESSION['user']->username;
     $smarty->assign('itsme', $itsme);

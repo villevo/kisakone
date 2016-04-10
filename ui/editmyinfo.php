@@ -66,6 +66,10 @@ function InitializeSmartyVariables(&$smarty, $error)
     $smarty->assign('player', @$player);
     if (@$player)
         $smarty->assign('dob', $player->birthyear . '-1-1');
+	//Clubs
+		 $smarty->assign('user_club_data', GetClub($player->clubid) );
+ 
+		$smarty->assign('all_clubs', GetClubs());
 }
 
 /**

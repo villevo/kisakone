@@ -72,6 +72,16 @@
         <input type="radio" name="gender" value="female" {if $smarty.post.gender == 'female'}checked="checked"{/if} /> {translate id="female"}
         {formerror field='gender'}
     </div>
+	
+	<div style="margin-top: 8px">
+        <label for="club">{translate id=user_club}</label>
+			<select id="club" name="club">
+				<option value="null">{translate id=club_use_no_club}</option>
+			{foreach item=club from=$all_clubs}
+				<option value="{$club.id}" {if $club.id == $user_club_data.id} selected{/if} >{$club.Name}</option>
+			{/foreach}
+			</select>
+			        <!--  {formerror field='club'}  ei osaa... -->
     <div style="margin-top: 8px">
         <label>{translate id='dob'}</label>
         {translate id='year_default' assign='year_default'}

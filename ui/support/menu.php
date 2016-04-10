@@ -32,6 +32,7 @@ function page_initializeMainMenu()
     $mainmenu[] = array('title' => 'users', 'url' => 'users');
     if (IsAdmin()) {        
         $mainmenu[] = array('title' => 'administration', 'url' => 'admin');
+	    $mainmenu[] = array('title' => 'menu_scores', 'url' => '../scores');
     }
 
     return $mainmenu;

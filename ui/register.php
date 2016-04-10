@@ -35,6 +35,8 @@ function InitializeSmartyVariables(&$smarty, $error)
     else {
         $smarty->assign('initial_date', '0-0-0');
     }
+	//Clubs
+		$smarty->assign('all_clubs', GetClubs());
 }
 
 /**

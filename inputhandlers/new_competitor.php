@@ -83,6 +83,7 @@ function processForm()
     if ($gender != 'male' && $gender != 'female')
         $problems['gender'] = translate('FormError_NotEmpty');
 
+	$club = @$_POST['club'];
     $dobYear = $_POST['dob_Year'];
     if ($dobYear != (int) $dobYear)
         $problems['dob'] = translate('FormError_NotEmpty');

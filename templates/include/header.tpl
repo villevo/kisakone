@@ -27,6 +27,7 @@
 <title>{$title} - {translate id=site_name}</title>
 
 <link rel="stylesheet" href="{$url_base}css/style.css">
+<link rel="stylesheet" href="{$url_base}css/custom.css">
 <link rel="apple-touch-icon" href="{$url_base}images/apple-touch-icon.png">
 <script src="{$url_base}js/jquery-1.11.2.min.js"></script>
 <script src={if $mod_rewrite}"{$url_base}javascript/base"{else}"{$url_base}index.php?page=javascript/base"{/if} defer></script>
