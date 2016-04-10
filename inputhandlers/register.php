@@ -28,6 +28,7 @@ require_once 'data/user.php';
 require_once 'data/configs.php';
 
 
+
 /**
  * Processes the login form
  * @return Nothing or Error object on error
@@ -82,6 +83,7 @@ function processForm()
     $gender = @$_POST['gender'];
     if ($gender != 'male' && $gender != 'female')
         $problems['gender'] = translate('FormError_NotEmpty');
+	$club = $_POST['club'];
 
     $dobYear = $_POST['dob_Year'];
     if ($dobYear != (int) $dobYear)
@@ -107,9 +109,11 @@ function processForm()
         $r->errorPage = 'error';
         return $r;
     }
+	$nuid = GetUserId($username);
+	$setuserclub = SaveUserClub($nuid, $club);
 
     set_secure_cookie("kisakone_login", 1);
-    $nuid = GetUserId($username);
+
     $newuser = GetUserDetails($nuid);
 
     if (!@$_COOKIE['kisakone_login'])

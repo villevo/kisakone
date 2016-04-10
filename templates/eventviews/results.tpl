@@ -20,6 +20,19 @@
  * You should have received a copy of the GNU General Public License
  * along with Kisakone.  If not, see <http://www.gnu.org/licenses/>.
  * *}
+ 
+ {* Viikkokisa leveli 2: tulokset kilpailu kohtaisia joten vain leaderboard näytetään *}
+{if $event->levelId == 2}
+<script type="text/javascript"> 
+document.location='../katso/leaderboard'; 
+</script> 
+{/if}
+
+
+	
+	
+
+{if $event->levelId != 2}
  {if $mode != 'body'}
  <style type="text/css">{literal}
     .resultrow td, .resultrow th {
@@ -114,6 +127,8 @@
  <div id="event_content">
     {$page->formattedText}
 </div>
+
+
 
 {if $pdgaUrl}
 <div id="pdga_link">
@@ -608,4 +623,5 @@
 
     //]]>
     </script>
+{/if}
 {/if}

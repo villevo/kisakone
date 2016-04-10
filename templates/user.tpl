@@ -25,7 +25,7 @@
 
 <h2>{translate id=user_header user=$userinfo->username|escape}</h2>
 
-<table style="width:500px">
+<table style="width:800px">
    <tr>
       <td style="width: 200px">{translate id=user_name}: </td>
       <td>{$userinfo->fullname|escape}</td>
@@ -40,10 +40,13 @@
       {if $pdga_country and $pdga_country != 'FI'}
          <td>{translate id=user_country}:</td>
          <td>{if $pdga_state}{$pdga_state}, {/if}{$pdga_country}</td>
-      {elseif $sfl_enabled}
-         <td>{translate id=user_club}:</td>
-         <td>{$data.club_name|escape} {if $data.club_short} ({$data.club_short}) {else} {translate id=user_no_club} {/if}</td>
       {/if}
+	<td>{translate id=user_club}:</td>
+         <td>{$user_club_data.Name|escape} {if $user_club_data.ShortName} ({$user_club_data.ShortName|escape}) {else} {translate id=club_use_no_club} {/if}</td>
+
+		 
+		 
+		 
       </tr>
       <tr>
          <td>{translate id=user_yearofbirth}: </td>
@@ -104,15 +107,23 @@
 {/if}
 {/if}
 
-{if $pdga_enabled}
+
 {if $player && $player->pdga}
 <h2>{translate id=user_pdga_title}</h2>
 
 <table style="width:335px">
+
+ <tr>
+    <td><label for="pdga_number">{translate id=pdga_number}</label></td>
+    <td><span id="pdga_number"><a href="http://www.pdga.com/player/{$player->pdga}">{$player->pdga}</a></span></td>
+</tr>
+
+
+
 {include file='include/pdgainfotable.tpl'}
 </table>
 {/if}
-{/if}
+
 
 {if $isadmin}
 <h2>{translate id=admin_user_options}</h2>

@@ -75,6 +75,8 @@ function processForm()
     if (!preg_match('/^.+@.+\..+$/', $email))
         $problems['email'] = translate('FormError_InvalidEmail');
     $email_old = $_POST['email_old'];
+	//clubs
+	    $club = $_POST['club'];
 
     $player = $eduser->GetPlayer();
     if ($player) {
@@ -113,7 +115,7 @@ function processForm()
         return $error;
     }
 
-    $result = EditUserInfo($uid, $email, $firstname, $lastname, $gender, $pdga, $dobYear, $user_username);
+    $result = EditUserInfo($uid, $email,$club, $firstname, $lastname, $gender, $pdga, $dobYear, $user_username);
     if (!is_a($result, 'Error')) {
         if (!$username) {
             $user->birthyear = $dobYear;

@@ -249,7 +249,7 @@ function InitializeSmartyVariables(&$smarty, $error)
             $view = 'leaderboard';
             $results_tmp = GetEventResultsWithoutHoles($event->id);
             $results = pdr_GroupByClasses($results_tmp);
-            $results2 = pdr_GroupByClasses(GetEventResultsWithoutHolesHCP($event->id));
+            $results2 = pdr_GroupByClasses2(GetEventResultsWithoutHolesHCP($event->id));
 
             $scoresAssigned = null;
             foreach ($results as $class) {
@@ -456,6 +456,30 @@ function pdr_GroupByClasses($data)
 
     return $out;
 }
+
+/**
+ * Groups results by the classes of the players
+ */
+function pdr_GroupByClasses2($data)
+{
+    $out = array();
+    foreach ($data as $row) {
+        // A little hack as we added PDGA participant lists as well
+        $class = "Tasoitus-sarja"; // Kaikki pelaajat samaan sarjaan
+        if (!isset($out[$class]))
+            $out[$class] = array();
+        $out[$class][] = $row;
+    }
+
+
+    // Shouldn't really call a function internal to core, but it does the exact thing
+    // we need here
+    uasort($out, 'core_sort_by_count');
+
+    return $out;
+}
+
+
 
 /**
  * Combines strings "nicely"; that is, commas between all items, except the last 2

@@ -78,8 +78,8 @@
 <p class="preliminary" style="display: none">
     {translate id=preliminary_results}
 </p>
-
-<table class="results ">
+<div class="results_raw">
+<table class="results narrow">
 {foreach from=$resultsByClass key=class item=results}
     <tr style="border: none">
         {math assign=colspan equation="5+x" x=$numRounds}
@@ -100,9 +100,9 @@
             <tr class="thr">
                 <th>{translate id=result_pos}</th>
                 <th>{translate id=result_name}</th>
-                {if $sfl_enabled}
+
                 <th>{translate id=clubname}</th>
-                {/if}
+
                 <th>PDGA</th>
                 {if $pdga_enabled}
                 <th>{translate id=pdga_rating}</th>
@@ -110,7 +110,7 @@
                 {foreach from=$rounds key=index item=round}
                     {math assign=roundNumber equation="x+1" x=$index}
                     <th>{translate id=round_number_short number=$roundNumber}</th>
-                    <th>HCP{$roundNumber}</th>
+              <!--      <th>HCP{$roundNumber}</th> -->
                 {/foreach}
                 <th>{translate id=leaderboard_hole}</th>
                 <th>+/-</th>
@@ -129,9 +129,9 @@
         <tr class="resultrow">
             <td id="r{$result.PlayerId}_pos">{$result.Standing}</td>
             <td class="leftside"><span class="flag-icon flag-icon-{$country|lower}"></span>{$result.FirstName|escape|replace:' ':'&nbsp;'}&nbsp;{$result.LastName|escape|replace:' ':'&nbsp;'}</td>
-            {if $sfl_enabled}
+
             <td><abbr title="{$result.ClubLongName|escape}">{$result.ClubName|escape}</abbr></td>
-            {/if}
+
             <td>{$result.PDGANumber|escape}</td>
             {if $pdga_enabled}
             <td>{$result.Rating|escape}</td>
@@ -142,7 +142,7 @@
                 {assign var=rresult value=$result.Results.$roundid.Total}
                 {if !$rresult}{assign var=rresult value=0}{/if}
                 <td id="r{$result.PlayerId}_{$hr_id}">{$rresult}</td>
-                <td>{$result.Results.$roundid.RoundedHandicap} ({$result.Results.$roundid.CalculatedHandicap})</td>
+             <!--   <td>{$result.Results.$roundid.RoundedHandicap} ({$result.Results.$roundid.CalculatedHandicap})</td> -->
             {/foreach}
 
             <td id="r{$result.PlayerId}_tc">{$result.TotalCompleted}</td>
@@ -163,12 +163,21 @@
     {/foreach}
 {/foreach}
 </table>
-
+</div>
 <!-- Jyli Handicap: Show Handicapped results -->
+	{if $event->levelId == 2}
+
 <br />
 <h2>{translate id=handicapped_results}</h2>
 
-<table class="results ">
+
+
+
+
+
+
+<div class="results_hcp">
+<table class="results narrow ">
 {foreach from=$resultsByClassHCP key=class item=results}
     <tr style="border: none">
         {math assign=colspan equation="5+x" x=$numRounds}
@@ -185,7 +194,20 @@
             <tr>
                 <td style="height: 8px; background-color: white;"></td>
             </tr>
+		
+		
+		     <tr class="thr">
+                <th colspan=4 style="height: 8px; background-color: white;"></th>
+                
+			<!-- <th>{translate id=leaderboard_hole}</th> -->
+                <th colspan=3> &#x25BC;&#8194;&#8194;&#8194; HCP &#8194;&#8194;&#8194;&#x25BC;</th>
 
+            </tr>
+			
+			
+		
+		
+		
             <tr class="thr">
                 <th>{translate id=result_pos}</th>
                 <th>{translate id=result_name}</th>
@@ -201,7 +223,7 @@
                     <th>{translate id=round_number_short number=$roundNumber}</th>
                     <th>HCP{$roundNumber}</th>
                 {/foreach}
-                <th>{translate id=leaderboard_hole}</th>
+			<!-- <th>{translate id=leaderboard_hole}</th> -->
                 <th>+/-</th>
                 <th>{translate id=result_cumulative}</th>
                 {if $includePoints}
@@ -234,7 +256,7 @@
                 <td>{$result.Results.$roundid.RoundedHandicap} ({$result.Results.$roundid.CalculatedHandicap})</td>
             {/foreach}
 
-            <td id="r{$result.PlayerId}_tc">{$result.TotalCompleted}</td>
+         <!--   <td id="r{$result.PlayerId}_tc">{$result.TotalCompleted}</td> -->
 
             <td id="r{$result.PlayerId}_pm">{if $result.DidNotFinish}DNF{else}{$result.TotalPlusminusHCP}{/if}</td>
             <td id="r{$result.PlayerId}_t">{if $result.DidNotFinish}DNF{else}{$result.HandicappedTotal}{/if}</td>
@@ -252,5 +274,9 @@
     {/foreach}
 {/foreach}
 </table>
+<div>
+
+{/if}
+    
 <!-- Jyli Handicap end -->
 {/if}

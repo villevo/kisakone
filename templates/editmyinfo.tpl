@@ -51,6 +51,16 @@
         {formerror field='email'}
     </div>
 
+	    <div>
+        <label for="club">{translate id=user_club}</label>
+			<select id="club" name="club">
+				<option value="null">{translate id=club_use_no_club}</option>
+			{foreach item=club from=$all_clubs}
+				<option value="{$club.id}" {if $club.id == $user_club_data.id} selected{/if} >{$club.Name}</option>
+			{/foreach}
+			</select>
+			        <!--  {formerror field='club'}  ei osaa... -->
+			</div>
     {if $player}
     <h2>{translate id='reg_player_info'}</h2>
      <div>
