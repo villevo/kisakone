@@ -21,18 +21,8 @@
  * along with Kisakone.  If not, see <http://www.gnu.org/licenses/>.
  * *}
  
- {* Viikkokisa leveli 2: tulokset kilpailu kohtaisia joten vain leaderboard näytetään *}
-{if $event->levelId == 2}
-<script type="text/javascript"> 
-document.location='../katso/leaderboard'; 
-</script> 
-{/if}
 
 
-	
-	
-
-{if $event->levelId != 2}
  {if $mode != 'body'}
  <style type="text/css">{literal}
     .resultrow td, .resultrow th {
@@ -128,6 +118,11 @@ document.location='../katso/leaderboard';
     {$page->formattedText}
 </div>
 
+
+{if $event->levelId == 2}
+<a href='../katso/leaderboard'> Viikkokisojen tulokset löytyy Leaderboard-sivulta</a> 
+</script> 
+{else}
 
 
 {if $pdgaUrl}

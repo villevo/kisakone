@@ -79,7 +79,7 @@
     {translate id=preliminary_results}
 </p>
 <div class="results_raw">
-<table class="results narrow">
+<table class="results">
 {foreach from=$resultsByClass key=class item=results}
     <tr style="border: none">
         {math assign=colspan equation="5+x" x=$numRounds}

@@ -25,7 +25,6 @@
 <meta charset="utf-8">
 
 <title>{$title} - {translate id=site_name}</title>
-
 <link rel="stylesheet" href="{$url_base}css/style.css">
 <link rel="stylesheet" href="{$url_base}css/custom.css">
 <link rel="apple-touch-icon" href="{$url_base}images/apple-touch-icon.png">
@@ -33,6 +32,8 @@
 <script src={if $mod_rewrite}"{$url_base}javascript/base"{else}"{$url_base}index.php?page=javascript/base"{/if} defer></script>
 
 <link rel="stylesheet" href="{$url_base}css/flag-icon/css/flag-icon.min.css">
+
+<link href='https://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css'>
 
 {if $ui}
 <script src="{$url_base}js/jquery-ui-1.11.2.min.js" defer></script>
@@ -59,34 +60,45 @@
 <script src="{$url_base}js/addthisevent/ate.min.js" defer></script>
 <link rel="stylesheet" href="{$url_base}js/addthisevent/ate.css" />
 {/if}
+<!-- Font Awesome CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 {$extrahead}
 <meta name="x-kisakone-version" content="{$kisakone_version}">
 
 <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
+{literal}
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
+  ga('create', 'UA-68882198-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+{/literal}
 <body>
 
-<table id="contentcontainer" cellpadding="0" cellspacing="0">
-    <tr id="headtr">
-    <td colspan="3">
-        <header id="header">
-            {include file="include/loginbox.tpl"}
-            {if $smarty.get.languagebar }
-                {* Disabled from normal use as we only have a single language *}
-                {include file='include/languagebar.tpl'}
-            {/if}
-            <img id="sitelogo" src="{$url_base}images/sitelogo.png" alt="{translate id=site_name}" />
 
-            <h1 id="sitename">{translate id=site_name_long}</h1>
-            <div id="pagename">{$title}</div>
+        <header id="header">
+			<div class="head_container container_widht">
+				{include file="include/loginbox.tpl"}
+					<img id="sitelogo" src="http://www.rolffarit.com/kisakone/images/sitelogo.png" alt="{translate id=site_name}" />
+					<div class="sitetitles">
+						<div id="sitename">{translate id=site_name_long}</div>
+						<div id="pagename">{$title}</div>
+					</div>
+			</div>
         </header>
     {include file="include/mainmenu.tpl"}
-    </td>
-    </tr>
 
-    <tr id="maintr2">
+<div class="outer_container">
+<div class="container container_widht">
+<table id="headdiv" cellpadding="0" cellspacing="0">
+    <tr id="maintr2" class="maintti">
         <td id="submenucontainer">        <br />
             {$submenu_content}
 

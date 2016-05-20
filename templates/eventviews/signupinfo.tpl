@@ -59,24 +59,6 @@
 <form method="post" class="">
     <input type="hidden" name="formid" value="sign_up" />
     {if $user}
-        <div id="playerinfo" style="float: right; width: 200px" class="searcharea">
-            <table>
-            <tr>
-                <td><label for="sfl_license">{translate id=license_status_header}</label></td>
-                <td><span id="sfl_license">
-                    {if $sfl_license}
-                        {translate id=license_paid}
-                    {elseif $sfl_membership}
-                        {translate id=membership_paid}
-                    {else}
-                        {translate id=none_paid}
-                    {/if}
-                </span></td>
-            </tr>
-            {include file='include/pdgainfotable.tpl'}
-            </table>
-        </div>
-
         <p class="signup_status">{translate id=not_signed_up}</p>
 
         {assign var=player value=$user->getPlayer()}

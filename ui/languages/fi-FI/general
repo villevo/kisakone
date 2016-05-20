@@ -56,8 +56,8 @@ registration_done_title Rekisteröityminen suoritettu
 error_title     Virhe
 newevent_title    Luo uusi kilpailu
 editevent_title     Muokkaa kilpailua
-login_title Kirjaudu sisään
-register_title   Rekisteröityminen
+login_title    Kirjaudu sisään
+register_title      Rekisteröityminen
 myinfo_title    Omat tiedot
 editmyinfo_title    Muokkaa omia tietoja
 changepassword_title    Vaihda salasanaa

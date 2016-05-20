@@ -100,7 +100,7 @@ ban_long       Estä sisäänkirjautuminen
 user_not_player     Käyttäjä on kisakoneen hallinnoija, ei kilpailija.
 
 
-recover_password_help   Syötä käyttäjänimesi tai salasanasi. Lähetettyäsi lomakkeen salasanan vaihtoon tarvittavat tiedot lähetetään sinulle sähköpostitse.
+recover_password_help   Syötä käyttäjänimesi tai sähköpostiosoitteesi. Lähetettyäsi lomakkeen salasanan vaihtoon tarvittavat tiedot lähetetään sinulle sähköpostitse.
 
 username_or_email   Käyttäjänimi tai sähköposti
 recover     Palauta

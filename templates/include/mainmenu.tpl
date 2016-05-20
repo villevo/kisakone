@@ -20,12 +20,13 @@
  * along with Kisakone.  If not, see <http://www.gnu.org/licenses/>.
  * *}
 {assign var='test' value='a & b'}
+<div class="center">
 <ul id="mainmenu">
 
     {section name=menuitem loop=$mainmenu}
     <li {if $mainmenuselection eq $mainmenu[menuitem].title} class="selected"{/if}>
         <a
-           href="{url page=$mainmenu[menuitem].url}">{translate id=$mainmenu[menuitem].title}</a>
+           href="{url page=$mainmenu[menuitem].url}" {if $mainmenuselection eq $mainmenu[menuitem].title} class="selected_a"{/if}>{translate id=$mainmenu[menuitem].title}</a>
     </li>
     {/section}
     {* help disabled due to there being no help files
@@ -35,3 +36,4 @@
             {translate id=mainmenu_help}</a>
     </li>*}
 </ul>
+</div>

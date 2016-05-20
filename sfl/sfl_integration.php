@@ -37,6 +37,8 @@ require_once 'data/configs.php';
  */
 function sfl_api_run_query($where)
 {
+	//exit for club_use.. muuten tulee erroria kilpailijan ilmoittautumisessa.
+		return 0;
     $rows = db_all("SELECT year, license,
                         sfl_player.pdga, sfl_player.sfl_id, sfl_clubs.club_id,
                         CAST(CAST(sfl_clubs.club_name AS char character set utf8) AS binary) AS club_name,
@@ -56,6 +58,7 @@ function sfl_api_run_query($where)
     $result = array();
     $result['status'] = false;
     $year = null;
+
     foreach ($rows as $line => $row) {
         foreach (array_keys($row) as $key) {
             switch ($key) {
