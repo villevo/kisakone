@@ -1059,11 +1059,11 @@ AND
 		
         $retValue[] = new Event($row);
 		}
-		
+		/*
 		echo "<pre>";
 		print_r($retValue);
 		echo "</pre>";
-		
+		*/
     return $retValue;
 }
 
