@@ -53,8 +53,8 @@
          <td>{$player->birthyear|escape}</td>
       </tr>
       <tr>
-         <td>{translate id=users_hcp}: </td>
-         <td>{$player->hcp|escape}</td>
+         <td>Tasoitus nyt: </td>
+         <td>{if $player->hcp|escape > 0 }+{/if}{$player->hcp|escape}</td>
       </tr>      
    {else}
       <tr><td colspan="2">
@@ -142,5 +142,7 @@
 {/if}
 
 {/if}
+
+{include file='include/hcp_info.tpl'}
 
 {include file='include/footer.tpl'}

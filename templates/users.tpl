@@ -57,7 +57,7 @@
 
      <tr>
         <td><a href="{$url}">{$user->firstname|escape} {$user->lastname|escape}</a></td>
-         <td>{$player->hcp}</td>
+         <td>{if $player->hcp > 0 }+{/if}{$player->hcp}</td>
          <td>{$player->pdga|escape}</td>
          {if $isadmin}
          <td><a href="{$url}">{$user->username|escape}</a></td>

@@ -131,6 +131,7 @@ a#loginMyInfo {
 
 #mainmenu li {
 float:left;
+white-space: nowrap;
 }
 #mainmenu a {
 display:block;
@@ -207,6 +208,8 @@ h1, h2, h3, h4, h5, h6 {
     margin: 5px 0px 0px;
     height: 27px;
     line-height: 13px;
+	padding-left: 13px;
+    padding-right: 20px;
 
 }
 
@@ -260,4 +263,13 @@ a {
 
 .hot_event_row a {
     color: blue;
+}
+
+.table_hcp_events_hcp {
+    background: #ccdae5;
+    text-align: center;
+}
+
+tr.border_bottom td {
+  border-bottom:1pt solid black;
 }

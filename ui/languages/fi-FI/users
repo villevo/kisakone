@@ -10,6 +10,10 @@ users_mysignups   Omat ilmoittautumiset
 users_payments  Maksut
 
 
+hcp_list_pvm Päivämäärä
+hcp_list_hcp Kierrokselta tuleva tasoitus
+
+
 # User screen
 user_header  Käyttäjän {user} tiedot
 user_name   Nimi

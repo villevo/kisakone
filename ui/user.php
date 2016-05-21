@@ -47,7 +47,11 @@ function InitializeSmartyVariables(&$smarty, $error)
         return Error::NotFound('user_record');
 
     $player = $user->GetPlayer();
-
+//echo $userid;	
+	            $events = HCPGetMyEvents($userid);
+	$smarty->assign('events', $events);
+	
+	
     $smarty->assign('userinfo', $user);
     $smarty->assign('player', $player);
 	 $smarty->assign('user_club_data', GetClub($player->clubid) );
@@ -105,3 +109,4 @@ function getMainMenuSelection()
 {
     return 'users';
 }
+

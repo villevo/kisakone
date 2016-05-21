@@ -991,3 +991,79 @@ function DeleteEvent($event)
     foreach ($queries as $query)
         db_exec($query);
 }
+
+
+
+
+function HCPGetMyEvents($userid)
+{
+$player= GetUserPlayer($userid);
+$playerid =   $player->id;
+
+	
+        $result = db_all("
+				SELECT
+:Event.id as eid,
+:Round.StartTime as roundtime,
+:Event.Name as eventname,
+:Classification.Short as playedclass,
+:Participation.OverallResult as score,
+:RoundResult.PlusMinus as scoreplusminus,
+:Participation.Standing as standing,
+:RoundResultHandicap.Handicap as round_hcp,
+:Course.Name as coursename,
+:CourseRating.Rating as courserating,
+:CourseRating.Slope as courseslope
+FROM
+:Player,
+:Participation,
+:Event,
+:Course,
+:CourseRating,
+:Round,
+:RoundResult,
+:RoundResultHandicap,
+:Classification
+WHERE
+:Participation.Player = $playerid
+AND
+:Participation.Player = :Player.player_id
+AND
+:Participation.Event = :Event.id
+AND
+:Round.Event = :Event.id
+AND
+:RoundResult.Round = :Round.id
+AND
+:RoundResult.Player = $playerid
+AND
+:RoundResultHandicap.RoundResult = :RoundResult.id
+AND 
+:Course.id = :Round.Course
+AND
+:CourseRating.Course = :Course.id
+AND
+:Classification.id = :Participation.Classification
+");
+    
+
+    if (db_is_error($result))
+        return $result;
+    $retValue = array();
+	
+    foreach ($result as $row) {
+		$row['hcp_used'] = number_format(CalculatePlayerHandicap($playerid,$row['roundtime']),1,'.','');
+		$row['rounded_hcp_used'] = round($row['hcp_used'],0);
+		$row['round_hcp'] = number_format($row['round_hcp'], 1, '.', '');
+		
+		
+        $retValue[] = new Event($row);
+		}
+		
+		echo "<pre>";
+		print_r($retValue);
+		echo "</pre>";
+		
+    return $retValue;
+}
+

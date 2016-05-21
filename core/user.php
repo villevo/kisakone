@@ -344,6 +344,7 @@ class User
         return GetUserEvents(null, $eventType);
     }
 
+
     /** ************************************************************************
      * Gets the Player object that associates with the user id
      *
