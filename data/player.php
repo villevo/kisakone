@@ -158,3 +158,65 @@ function CalculatePlayerHandicap($playerid, $roundtime = '9999-01-01') {
     return min(round($hcp/$rtu[$rtuidx]*0.96,2),$maxhcp);
 
 }
+
+//Tämä funkkari on suora kopio CalculatePlayerHandicap-funkkarista, lisätty pari eri laskuria joilla lasketaan: löydetyt kierrokset,käytettävät kierrokset ja käytetttävien kierrosten HCP.
+function HCP_GetmyHCPcalcinfo($userid, $roundtime = '9999-01-01') {
+
+$player= GetUserPlayer($userid);
+$playerid =   $player->id;
+    $maxhcp = 26;
+	
+    $rtu = array(0,1,1,1,2,2,2,3,3,4,4,5,5,6,6,7,7,8,9,10);
+    $hcps = array();
+	
+	$used_hcps = array();	
+	$cnt_found_hcp = 0;
+	$cnt_used_hcp = 0;
+	
+    $query = "SELECT Handicap FROM :RoundResultHandicap, :RoundResult, :Event, :Round 
+                WHERE :RoundResultHandicap.RoundResult=:RoundResult.id AND :Round.id=:RoundResult.Round AND :Round.Event=:Event.id 
+                AND Player=".$playerid." AND ResultsLocked < '".$roundtime."' ORDER BY Handicap ASC";
+    $result = db_all($query);
+    foreach ($result as $row) {
+        array_push($hcps,round($row['Handicap'],1));
+		
+		$cnt_found_hcp += 1;
+    }
+
+    $hcp = 0;
+	
+    $rtuidx = min(count($hcps),count($rtu) - 1);
+
+    if ($rtuidx === 0) {
+		$retValue = array();
+			$retValue['used'] = 0;
+			$retValue['found'] = 0;
+			$retValue['used_hcps'] = 0;
+		return $retValue;
+    	
+    }
+
+    for ($i = 0; $i < $rtu[$rtuidx]; $i++) {
+        $hcp += $hcps[$i];
+		array_push($used_hcps,$hcps[$i]);
+		$cnt_used_hcp += 1;
+    }
+		$used_hcps_string= implode(" + ",$used_hcps);
+		
+		
+		    $calchcp = $hcp/$rtu[$rtuidx]*0.96;
+				if($calchcp > $maxhcp){
+					$limit = true;
+				}else{
+					$limit = false;
+				}
+	
+	$retValue = array();
+		$retValue['used'] = $cnt_used_hcp;
+		$retValue['found'] = $cnt_found_hcp;
+		$retValue['used_hcps'] = $used_hcps_string;
+	    $retValue['limited'] = $limit;
+	
+	return $retValue;
+
+}

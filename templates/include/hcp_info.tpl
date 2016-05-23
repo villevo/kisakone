@@ -1,27 +1,52 @@
 
+<h3>Pelaajan {$userinfo->fullname|escape} tasoituksen määräytyminen</h3>
+Pelaajalta {$userinfo->fullname|escape} löytyy <b>{$hcpinfo.found|escape}</b> kpl Tasoituksellisia kierroksia joten tämän hetkisen pelaajatasoituksen
+{if $hcpinfo.used == 0} on 0.0.{/if}
+{if $hcpinfo.used == 1} laskentaan käytetään parasta kierrosta.{/if}
+{if $hcpinfo.used > 1} laskentaan käytetään {$hcpinfo.used|escape} parasta kierrosta.{/if}
+<br>
+{if $hcpinfo.used > 0}
+<div style="width: 150px;" >
+<table class="fraction" align="center" cellpadding="0" cellspacing="0">
+    <tr>
 
+        <td nowrap="nowrap" style="min-width: 20px;">{$hcpinfo.used_hcps}</td>
+		
+		<td rowspan="2" nowrap="nowrap" style="vertical-align: middle !important;">
+                x 0,96 <b>= {if $player->hcp|escape > 0 }+{/if}{$player->hcp|escape} </b> 
+        </td>
+    </tr>
+    <tr>
+        <td class="upper_line">
+            {$hcpinfo.used|escape}
+        </td>
+    </tr>
+</table>
+</div>
+ {if $hcpinfo.limited}
+	Pelaajan tasoitus on rajoitettu suurimpaan arvoon eli +26.
+{/if}
 
-<br><br>
-<h3>Pelaajan {$userinfo->fullname|escape} tasoituskierrokset</h3>
+{else}
+<br>
+<br>
+{/if}
+<h3>Tasoituskierrokset</h3>
 <table border="0" style="border-spacing:0px">
-	<!--<tr>
-	<td colspan=7></td>
-		<td colspan=3 class="table_hcp_events_hcp">HCP</td>
-	</tr>-->
-    <tr class="border_bottom">
-		<th>Päivämäärä</th>
-		<th class="nowrap">Kilpailun nimi</th>
-        <th>Rata</th>
-		<th class="nowrap">Pelattu luokassa</th>
-		<th>Tulos (+/-)</th>
-		<th>Sijoutus</th>
-		<th width=30px></th>
-		<th class="nowrap">Kierroksella käytetty tasoitus(Tarkka)</th>       
-		<th class="">Kierrokselta tuleva tasoitus</th>
-		<th class="nowrap ">Radan Rating/slope</th>
+    <tr >
+		<th class="hcpinfo_header">Päivämäärä</th>
+		<th class="nowrap hcpinfo_header">Kilpailun nimi</th>
+		<th class="hcpinfo_header">Rata</th>
+		<th class="nowrap hcpinfo_header">Pelattu luokassa</th>
+		<th class="hcpinfo_header">Tulos (+/-)</th>
+		<th class="hcpinfo_header">Sijoutus</th>
+		<th class="hcpinfo_header" width=30px></th>
+		<th class="nowrap hcpinfo_header">Kierroksella käytetty tasoitus(Tarkka)</th>       
+		<th class="hcpinfo_header">Kierrokselta tuleva tasoitus</th>
+		<th class="nowrap hcpinfo_header">Radan Rating/slope</th>
 
     </tr>
-   {foreach from=$events item=event}
+   {foreach from=$UserHCPevents item=event}
         <tr>
 		            <td style="padding-bottom: 5px;">{$event->roundtime|date_format:"%e.%m.%Y"}</td>
 
@@ -47,8 +72,8 @@
 
         </tr>
         {foreachelse}
-        <tr><td colspan="4">
-            <p>Pelaajalla ei ole pelattuna tasoituksellisia kilpailuja.</p>
+        <tr><td colspan="10">
+            <p>Pelaajalla ei ole pelattuna tasoituksellisia kilpailuja, pelaaja saa tasoituksen ensimmäisen tasoitetun viikkokisan jälkeen.</p>
         </td></tr>
     {/foreach}
 </table>
@@ -59,7 +84,7 @@
 <h4>Pelaajan tasoitus</h4>
 	<ul>
 		Pelaajantasoitus muodostuu kierroksilta tulevista <i>kierrostasoituksista.</i><br>
-		<br><span style="background: lightgray; padding: 5px; border-radius: 5px;">Pelaajantasoitus = Parhaiden kierrostasoitusten keskiarvo  x 0,96</span><br><br>
+		<p class="hcpinfo">Pelaajantasoitus = Parhaiden kierrostasoitusten keskiarvo  x 0,96</p>
 		Laskennassa käytetään pelaajan 1-10 parasta kierrostasoitusta riippuen pelattujen kierrosten määrästä(taulukko oikealla)
 		<br>
 		Tasoitusjärjestelmän suurin tasoitus on 26, eli tätä isompaa pelaajatasoitusta järjestelmä ei anna.
@@ -71,12 +96,14 @@
 	</ul>
 <h4>Kierrostasoituksen määräytyminen</h4>
 
-	<ul>
+	<ul>Lyhyesti: eri rata antaa eri tasoituksen riippuen radalle asetetuista tasoitus-arvoista, jos tarkempi tieto kiinnostaa niin foliohattu päähän ja lue sivu loppuun.
+	<br><br>
+	
 	Tasoitusjärjestelmän keskeisenä osana on radalle asetettavat tasoitus-arvot joiden avulla tasoitusjärjestelmän käyttö eri radoilla on mahdollista. 
 	<br>
 	Toistaiseksi vain Toramo ja Patokoski on asetettu tasoituksellisiksi radoiksi.
 	<br>
-	<br><span style="background: lightgray; padding: 5px; border-radius: 5px;">Kaava kierrostasoituksen laskennassa =(Tulos - Rating) * (80 / Slope ) </span><br>
+	<p class="hcpinfo">Kaava kierrostasoituksen laskennassa =(Tulos - Rating) * (80 / Slope )</p>
 	<br><br>
 	Rataa koskevia arvoja on kaksi, Rating ja Slope:
 	<br>
@@ -87,10 +114,13 @@
 	</li>
 	<br>
 	<li><b>Slope</b> = luku joka kuvaa radan vaikeutta tai siis antaa kerrointa lisää/vähemmän kun heitetty tulos eroaa Ratingista. Joillakin radoilla plussaa tulee helpommin kuin toisilla(Puistorata vs metsärata, pitkät väylät vs. lyhyet väylät tai tiheät metsät vs harvat metsät.)
-	Perusarvo on 80, joka on toramon Slope arvo.
-	Patokosken slope on 70.
+	Perusarvo on 80, joka on toramon Slope arvo joten Toramolla Slope ei vaikuta.
+	<br>
+	Patokosken slope on 70 koska rata on helppo.
+	<br>
 	<br>
 	Patokoski on helppo rata jolla ei tule helposti isoja lukemia joten jos heität +10 patokoskella niin eikö se ole tosi huonosti? slope arvolla saadan kaavan kautta kerrointa 80/70 = 1.14 jolloin tasoituskierrokseksi tuloksella +10 patokoskella tulee (64 - 48) * (80 / 70) =  18,2
+	Slope arvo vaikuttaa siis eniten huonosti heittäneille pelaajille koska se vaikuttaa kertoimen muodossa: esim. 2*1,14-tapauksessa vaikutus on pieni mutta 16*1,14-tapauksessa vaikutus on isompi.
 	<br>	
 	<br>
 	Muutama esimerkki radoilta tulevista tasoituksista:

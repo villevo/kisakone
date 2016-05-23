@@ -32,7 +32,5 @@
 {/if}
 </tr>
 </table>
-</div>
-</div>
 </body>
 </html>

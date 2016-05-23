@@ -29,6 +29,7 @@
     <p class="error">{$error}</p>
 
 {else}
+ {include file='include/weeklyinfo.tpl'}
 <table>
 
     {foreach from=$lists key=listtype item=events}

@@ -1044,6 +1044,8 @@ AND
 :CourseRating.Course = :Course.id
 AND
 :Classification.id = :Participation.Classification
+ORDER BY
+roundtime
 ");
     
 
@@ -1059,8 +1061,8 @@ AND
 		
         $retValue[] = new Event($row);
 		}
-		/*
-		echo "<pre>";
+		
+		/*echo "<pre>";
 		print_r($retValue);
 		echo "</pre>";
 		*/

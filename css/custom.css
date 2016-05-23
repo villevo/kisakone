@@ -266,10 +266,49 @@ a {
 }
 
 .table_hcp_events_hcp {
-    background: #ccdae5;
+    background: lightgray;
     text-align: center;
 }
 
 tr.border_bottom td {
   border-bottom:1pt solid black;
+}
+.hcpinfo {
+	background: lightgray;
+	padding: 5px; 
+	border-radius: 5px;
+	width: 500px;
+}
+
+
+td.upper_line {
+	border-top:solid 1px black;
+}
+	
+table.fraction { 
+    width: unset;
+    text-align: center;
+    vertical-align: middle;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    line-height: 2em;
+    background: lightgrey;
+    padding: 5px;
+    border-radius: 4px;
+}	
+
+.weeklyinfo {
+    background: lightgray;
+    margin: 0px;
+    width: 800px;
+    padding: 3px;
+    text-align: center;
+    align-content: center;
+    margin: auto;
+    border-radius: 5px;
+}
+
+.hcpinfo_header {
+    border-bottom: grey;
+    border-bottom-style: solid;
 }

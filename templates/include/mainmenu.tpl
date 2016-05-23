@@ -24,7 +24,7 @@
 <ul id="mainmenu">
 
     {section name=menuitem loop=$mainmenu}
-    <li {if $mainmenuselection eq $mainmenu[menuitem].title} class="selected"{/if}>
+    <li class="nowrap {if $mainmenuselection eq $mainmenu[menuitem].title} selected{/if}">
         <a
            href="{url page=$mainmenu[menuitem].url}" {if $mainmenuselection eq $mainmenu[menuitem].title} class="selected_a"{/if}>{translate id=$mainmenu[menuitem].title}</a>
     </li>

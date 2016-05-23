@@ -82,23 +82,25 @@
 {/literal}
 <body>
 
-
+<table id="contentcontainer" cellpadding="0" cellspacing="0">
+    <tr id="headtr">
+    <td colspan="3">
         <header id="header">
-			<div class="head_container container_widht">
-				{include file="include/loginbox.tpl"}
-					<img id="sitelogo" src="http://www.rolffarit.com/kisakone/images/sitelogo.png" alt="{translate id=site_name}" />
-					<div class="sitetitles">
-						<div id="sitename">{translate id=site_name_long}</div>
-						<div id="pagename">{$title}</div>
-					</div>
-			</div>
+            {include file="include/loginbox.tpl"}
+            {if $smarty.get.languagebar }
+                {* Disabled from normal use as we only have a single language *}
+                {include file='include/languagebar.tpl'}
+            {/if}
+            <img id="sitelogo" src="{$url_base}images/sitelogo.png" alt="{translate id=site_name}" />
+
+            <h1 id="sitename">{translate id=site_name_long}</h1>
+            <div id="pagename">{$title}</div>
         </header>
     {include file="include/mainmenu.tpl"}
+    </td>
+    </tr>
 
-<div class="outer_container">
-<div class="container container_widht">
-<table id="headdiv" cellpadding="0" cellspacing="0">
-    <tr id="maintr2" class="maintti">
+    <tr id="maintr2">
         <td id="submenucontainer">        <br />
             {$submenu_content}
 

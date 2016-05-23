@@ -48,8 +48,13 @@ function InitializeSmartyVariables(&$smarty, $error)
 
     $player = $user->GetPlayer();
 //echo $userid;	
-	            $events = HCPGetMyEvents($userid);
-	$smarty->assign('events', $events);
+	$HCPinfo = HCP_GetmyHCPcalcinfo($userid);
+	$UserHCPevents = HCPGetMyEvents($userid);
+//	echo "<pre>";
+//	print_r($HCPinfo);
+//	echo "</pre>";
+	$smarty->assign('hcpinfo', $HCPinfo);
+	$smarty->assign('UserHCPevents', $UserHCPevents);	
 	
 	
     $smarty->assign('userinfo', $user);
