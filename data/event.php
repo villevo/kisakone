@@ -640,6 +640,7 @@ function GetEventResultsWithoutHoles($eventid)
     $lastrow = null;
 
     foreach ($result as $row) {
+		$row['HCPJoinClass'] =  'HCP_standing_class';  // liitetään kaikki pelaajat samaan tasoitussarjaan jotta standing-tieto saadaan oikein yhdistetyssä Tasoitussarjassa.
 		
         if (!$lastrow || @$lastrow['PlayerId'] != $row['PlayerId']) {
             if ($lastrow)
@@ -674,12 +675,16 @@ function GetEventResultsWithoutHoles($eventid)
     $standings = array();    
     for ($i=0; $i < count($hcpsorted); $i++) {
     	$row = find_row($retValue, $hcpsorted[$i]['id']);
+    	if (!isset($standings[$hcpsorted[$i]['HCPJoinClass']])) {
+    		$standings[$hcpsorted[$i]['HCPJoinClass']] = 1;
     	} else {
+    		$standings[$hcpsorted[$i]['HCPJoinClass']]++;
     	}
     	
     	if ($i > 0 && $hcpsorted[$i]['HandicappedTotal'] == $hcpsorted[$i-1]['HandicappedTotal']) {
     		$retValue[$row]['HCPStanding'] = $retValue[$prevrow]['HCPStanding'];
     	} else {
+    		$retValue[$row]['HCPStanding'] = $standings[$hcpsorted[$i]['HCPJoinClass']];
     	}
     	$prevrow=$row;
     }    

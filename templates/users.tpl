@@ -22,6 +22,9 @@
 {translate id='users_title' assign='title'}
 {include file='include/header.tpl'}
 
+Yksilö tunnuksia kisakoneessa: {$singleusers|@count} kpl.
+<br>
+Pari-tunnuksia kisakoneessa: {$douplesusers|@count} kpl.
 <form method="get" class="usersform" action="{url page=users}">
     {initializeGetFormFields  search=false }
     <div class="formelements">
@@ -46,7 +49,7 @@
 
    </tr>
 
-   {foreach from=$users item=user}
+   {foreach from=$singleusers item=user}
 
       {assign var=player value=$user->GetPlayer()}
       {if $user->username == null || strpos($user->username, '/') !== false}
@@ -66,6 +69,29 @@
 
      </tr>
    {/foreach}
+   
+      {foreach from=$douplesusers item=duser}
+
+      {assign var=player value=$user->GetPlayer()}
+      {if $duser->username == null || strpos($duser->username, '/') !== false}
+        {capture assign=url}{url page="user" id=$duser->id}{/capture}
+        {else}
+        {capture assign=url}{url page="user" id=$duser->username}{/capture}
+        {/if}
+
+     <tr>
+        <td><a href="{$url}">{$duser->firstname|escape} {$duser->lastname|escape}</a></td>
+		<td>-</td>
+		<td>-</td>
+         {if $isadmin}
+         <td><a href="{$url}">{$duser->username|escape}</a></td>
+         {/if}
+
+
+     </tr>
+   {/foreach}
+   
+   
 </table>
 
 <div class="SearchStatus" />

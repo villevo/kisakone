@@ -33,8 +33,11 @@ function InitializeSmartyVariables(&$smarty, $error)
         return Error::AccessDenied();
 	*/
 	
-    $users = GetUsers(@$_GET['search'], @$_GET['sort']);
-    $smarty->assign('users', $users);
+	$singleusers = GetSingleUsers(@$_GET['search'], @$_GET['sort']);
+	$douplesusers = GetDouplesUsers(@$_GET['search'], @$_GET['sort']);
+
+    $smarty->assign('singleusers', $singleusers);
+    $smarty->assign('douplesusers', $douplesusers);
     $smarty->assign('isadmin', IsAdmin());
 }
 

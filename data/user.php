@@ -49,6 +49,95 @@ function GetUserIdByEmail($email)
     return @$row['id'];
 }
 
+// Single users
+// Returns an array of User objects
+function GetSingleUsers($searchQuery = '', $sortOrder = '')
+{
+    $sort = "Username";
+    if ($sortOrder)
+        $sort = data_CreateSortOrder($sortOrder,
+            array('name' => array('UserLastname', 'UserFirstname'), 'UserFirstname', 'UserLastname', 'pdga', 'Username'));
+
+    $where = data_ProduceSearchConditions($searchQuery,
+        array('UserFirstname', 'UserLastname', 'Username', ':Player.lastname', ':Player.firstname'));
+
+    $result = db_all("SELECT :User.id, Username, UserEmail, Role, UserFirstname, UserLastname, :User.Player,
+                                :Player.lastname AS pLN, :Player.firstname AS pFN, :Player.email AS pEM
+                            FROM :User
+                            LEFT JOIN :Player ON :User.Player = :Player.player_id
+                            WHERE $where   
+							AND
+							kisakone_User.Username is not null
+							AND
+							kisakone_Player.Firstname NOT LIKE 'pari'
+							AND
+							kisakone_Player.Lastname NOT LIKE 'pari'
+							AND
+							kisakone_Player.Lastname NOT LIKE 'Pari'
+							AND 
+							kisakone_Player.Lastname NOT LIKE 'Pari'
+                            ORDER BY $sort");
+
+    if (db_is_error($result))
+        return array();
+
+    $retValue = array();
+    foreach ($result as $row) {
+        $retValue[] = new User($row['id'], $row['Username'], $row['Role'],
+            data_GetOne($row['UserFirstname'], $row['pFN']),
+            data_GetOne($row['UserLastname'], $row['pLN']),
+            data_GetOne($row['UserEmail'], $row['pEM']),
+            $row['Player']);
+    }
+
+    return $retValue;
+}
+
+// Douples-accounts
+// Returns an array of User objects
+function GetDouplesUsers($searchQuery = '', $sortOrder = '')
+{
+    $sort = "Username";
+    if ($sortOrder)
+        $sort = data_CreateSortOrder($sortOrder,
+            array('name' => array('UserLastname', 'UserFirstname'), 'UserFirstname', 'UserLastname', 'pdga', 'Username'));
+
+    $where = data_ProduceSearchConditions($searchQuery,
+        array('UserFirstname', 'UserLastname', 'Username', ':Player.lastname', ':Player.firstname'));
+
+    $result = db_all("SELECT :User.id, Username, UserEmail, Role, UserFirstname, UserLastname, :User.Player,
+                                :Player.lastname AS pLN, :Player.firstname AS pFN, :Player.email AS pEM
+                            FROM :User
+                            LEFT JOIN :Player ON :User.Player = :Player.player_id
+                            WHERE $where   
+							AND
+							kisakone_User.Username is not null
+							AND
+							kisakone_Player.Firstname LIKE 'pari'
+							OR
+							kisakone_Player.Lastname LIKE 'pari'
+							OR
+							kisakone_Player.Lastname LIKE 'Pari'
+							OR 
+							kisakone_Player.Lastname LIKE 'Pari'
+                            ORDER BY $sort");
+
+    if (db_is_error($result))
+        return array();
+
+    $retValue = array();
+    foreach ($result as $row) {
+        $retValue[] = new User($row['id'], $row['Username'], $row['Role'],
+            data_GetOne($row['UserFirstname'], $row['pFN']),
+            data_GetOne($row['UserLastname'], $row['pLN']),
+            data_GetOne($row['UserEmail'], $row['pEM']),
+            $row['Player']);
+    }
+
+    return $retValue;
+}
+
+
 
 // Returns an array of User objects
 function GetUsers($searchQuery = '', $sortOrder = '')
@@ -82,6 +171,8 @@ function GetUsers($searchQuery = '', $sortOrder = '')
 
     return $retValue;
 }
+
+
 
 
 // Returns an array of User objects for users who are also Players
