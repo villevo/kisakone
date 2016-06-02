@@ -640,6 +640,7 @@ function GetEventResultsWithoutHoles($eventid)
     $lastrow = null;
 
     foreach ($result as $row) {
+		
         if (!$lastrow || @$lastrow['PlayerId'] != $row['PlayerId']) {
             if ($lastrow)
                 $retValue[] = $lastrow;
@@ -673,16 +674,12 @@ function GetEventResultsWithoutHoles($eventid)
     $standings = array();    
     for ($i=0; $i < count($hcpsorted); $i++) {
     	$row = find_row($retValue, $hcpsorted[$i]['id']);
-    	if (!isset($standings[$hcpsorted[$i]['ClassName']])) {
-    		$standings[$hcpsorted[$i]['ClassName']] = 1;
     	} else {
-    		$standings[$hcpsorted[$i]['ClassName']]++;
     	}
     	
     	if ($i > 0 && $hcpsorted[$i]['HandicappedTotal'] == $hcpsorted[$i-1]['HandicappedTotal']) {
     		$retValue[$row]['HCPStanding'] = $retValue[$prevrow]['HCPStanding'];
     	} else {
-    		$retValue[$row]['HCPStanding'] = $standings[$hcpsorted[$i]['ClassName']];
     	}
     	$prevrow=$row;
     }    
