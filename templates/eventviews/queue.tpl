@@ -39,7 +39,6 @@
       <th>{sortheading field=1 id=num sortType=integer}</th>
       <th>{sortheading field=LastName id=lastname sortType=alphabetical}</th>
       <th>{sortheading field=FirstName id=firstname sortType=alphabetical}</th>
-      {if $sfl_enabled}<th>{sortheading field=ClubName id=clubname sortType=alphabetical}</th>{/if}
       <th>{sortheading field=ClassName id=class sortType=alphabetical}</th>
       <th>{sortheading field=pdga id=users_pdga sortType=integer}</th>
       {if $pdga_enabled}<th>{sortheading field=Rating id=pdga_rating sortType=integer}</th>{/if}
@@ -57,9 +56,9 @@
         {$participant.user->firstname|escape}
         {if $participant.user->username}</a>{/if}
       </td>
-      {if $sfl_enabled}
+
       <td><abbr title="{$participant.clubLongName|escape}">{$participant.clubName|escape}</abbr></td>
-      {/if}
+
       <td><abbr title="{$participant.className|escape}">{$participant.classShort|escape}</abbr></td>
       <td>{$participant.player->pdga|escape}</td>
       {if $pdga_enabled}<td>{$participant.rating|escape}</td>{/if}
