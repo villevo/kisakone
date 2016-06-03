@@ -39,6 +39,7 @@
       <th>{sortheading field=1 id=num sortType=integer}</th>
       <th>{sortheading field=LastName id=lastname sortType=alphabetical}</th>
       <th>{sortheading field=FirstName id=firstname sortType=alphabetical}</th>
+	  <th>{sortheading field=ClubName id=clubname sortType=alphabetical}</th>
       <th>{sortheading field=ClassName id=class sortType=alphabetical}</th>
       <th>{sortheading field=pdga id=users_pdga sortType=integer}</th>
       {if $pdga_enabled}<th>{sortheading field=Rating id=pdga_rating sortType=integer}</th>{/if}
