@@ -10,7 +10,8 @@ contents_thisyear      Kuluvan vuoden kilpailut
 events_past   {year} kilpailut
 
 new_event_details Uuden kilpailun tiedot
-
+events_by_level   {level} kilpailut
+submenu_all_events_by_level Kilpailut tasoittain
 
 event_venue     Paikka
 event_level     Taso

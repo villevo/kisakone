@@ -30,7 +30,7 @@
 <p> Laita Etunimeksi <b><u>pari</u></b> ja sukunimeksi kilpailijoiden nimet esim. <b><u> Petri puttaaja Antti Annukka</u></b> 
 </p>Ilmoittaudu parikisaan tällä tunnuksella. tämä vain parikisaan ilmoittautuessa, henkilökohtaiset kilpailija tunnukset tehdään normaalisti.
 <br>
-<p style="color:red;">mikäli unohdat salasanan niin älä tee uutta tunnusta vaan käytä  <a href="http://rolffarit.com/kisakone/unohtunutsalasana">salasanan palautusta</a>.</p>
+<p style="color:red;">mikäli unohdat salasanan niin älä tee uutta tunnusta vaan käytä  <a href="http://rolffarit.com/kisakone/unohtunutsalasana">salasanan palautusta</a>, jos ei vieläkään onnistu niin ota yhteys pj@rolffarit.com</p>
 
 
 

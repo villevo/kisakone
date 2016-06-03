@@ -950,7 +950,14 @@ function GetPastEvents($onlySome, $onlyYear = null)
     return data_GetEvents("Date < FROM_UNIXTIME(" . time() . ") $thisYear AND ResultsLocked IS NOT NULL", '`Date` DESC', $limit);
 }
 
-
+function GetEventsByLevel($levelid, $year = null)
+ {
+     $year = esc_or_null($year && is_numeric($year) ? $year : date('Y'), 'int');
+     $levelid = esc_or_null($levelid, 'int');
+     return data_GetEvents("Level = $levelid AND YEAR(Date) = $year", null, null);
+ }
+ 
+ 
 function DeleteEvent($event)
 {
     $eventid = esc_or_null($event->id, 'int');
