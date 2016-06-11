@@ -32,8 +32,7 @@
 
 <h2>{translate id=event_playerlimit}</h2>
 
-  <p style="clear: both;">{translate id=event_playerlimit_text}: {$playerlimit}</p>
-
+  <p style="clear: both;">{if $event->levelId == 10}Tapahtumaan {else} Kilpailuun {/if} otetaan maksimissaan pelaajia: {$playerlimit} kpl</p>
 <h2>{translate id=class_list}</h2>
 
   <table id="classLimitTable">

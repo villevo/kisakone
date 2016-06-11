@@ -22,9 +22,9 @@
 {translate id='users_title' assign='title'}
 {include file='include/header.tpl'}
 
-Yksilö tunnuksia kisakoneessa: {$singleusers|@count} kpl.
+Yksilötunnuksia kisakoneessa: {$singleusers|@count} kpl.
 <br>
-Pari-tunnuksia kisakoneessa: {$douplesusers|@count} kpl.
+Paritunnuksia kisakoneessa: {$douplesusers|@count} kpl.
 <form method="get" class="usersform" action="{url page=users}">
     {initializeGetFormFields  search=false }
     <div class="formelements">

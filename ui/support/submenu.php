@@ -118,6 +118,9 @@ function page_getSubMenu()
             'children' => array()
         );
     }
+	
+	
+
     // Defining the main submenu; note: items utilize access rights combined from it and all its parent items, so
     // as long as there is one item that requires correct rights in the chain, the actual access rights can be left
     // out (and won't have to be checked every single time)
@@ -189,39 +192,47 @@ function page_getSubMenu()
 
     // Event details part can only be shown if there is a selected event; because of that it's added
     // to the menu conditionally
+		//
+	$event_level = pdr_GetEventLevel($id);
+
+			
     if ($id == (int) $id && $id != 0 && getmainmenuselection() == 'events') {
+		
+
         $eventData = array('title' => pdr_GetEventName($id), 'link' => array('page' => 'event', 'id' => $id), 'access' => null, 'children' => array(
             array('title' => translate('event_info'), 'link' => array('page' => 'event', 'id' => $id, 'view' => ''), 'access' => null, 'children' => array(
-                array('title' => translate('event_newsarchive'), 'link' => array('page' => 'event', 'id' => $id, 'view' => 'newsarchive'), 'access' => null, 'children' => array()),
+                array('title' => translate('event_newsarchive'), 'link' => array('page' => 'event', 'id' => $id, 'view' => 'newsarchive'), 'access' => null, 'children' => array(), $event_level != 2),
             )),
 
-            /*array('title' => translate('event_news'), 'link' => array('page' => 'news', 'id' => $id, 'view' => ''), 'access' => null, 'children' => array()),*/
-
-            array('title' => translate('event_results'), 'link' => array('page' => 'event', 'id' => $id, 'view' => 'results'), 'access' => null, 'children' => array(
+		  
+		 
+            array('title' => translate('event_results'), 'link' => array('page' => 'event', 'id' => $id, 'view' => 'results'), 'condition' => $event_level != 10, 'access' => null, 'children' => array(
                 array('title' => translate('event_live_results'), 'link' => array('page' => 'event', 'id' => $id, 'view' => 'liveresults'), 'access' => null, 'children' => array()),
                 array('title' => translate('event_leaderboard'), 'link' => array('page' => 'event', 'id' => $id, 'view' => 'leaderboard'), 'access' => null, 'children' => array())
             )),
+			
+			
 
             array('title' => translate('event_competitors'), 'link' => array('page' => 'event', 'id' => $id, 'view' => 'competitors'), 'access' => null, 'children' => array(
                 array('title' => translate('event_queue'), 'link' => array('page' => 'event', 'id' => $id, 'view' => 'queue'), 'access' => null, 'children' => array()),
             )),
 
-            array('title' => translate('event_quotas'), 'link' => array('page' => 'event', 'id' => $id, 'view' => 'quotas'), 'access' => null, 'children' => array()),
-            array('title' => translate('event_course'), 'link' => array('page' => 'event', 'id' => $id, 'view' => 'course'), 'access' => null, 'children' => array()),
-            array('title' => translate('event_schedule'), 'link' => array('page' => 'event', 'id' => $id, 'view' => 'schedule'), 'access' => null, 'children' => array()),
+            array('title' => translate('event_quotas'), 'link' => array('page' => 'event', 'id' => $id, 'view' => 'quotas'), 'access' => null, 'children' => array(), 'condition' => $event_level != 2),
+            array('title' => translate('event_course'), 'link' => array('page' => 'event', 'id' => $id, 'view' => 'course'), 'access' => null, 'children' => array(), 'condition' => $event_level != 10),
+            array('title' => translate('event_schedule'), 'link' => array('page' => 'event', 'id' => $id, 'view' => 'schedule'), 'access' => null, 'children' => array(), 'condition' =>$event_level != 2),
 
-            array('title' => translate('event_signup_info'), 'link' => array('page' => 'event', 'id' => $id, 'view' => 'signupinfo'), 'access' => null, 'children' => array(
+            array('title' => translate('event_signup_info'), 'link' => array('page' => 'event', 'id' => $id, 'view' => 'signupinfo'), 'access' => null,  'condition' => $event_level !== 2, 'children' => array(
                 array('title' => translate('event_payment'), 'link' => array('page' => 'event', 'id' => $id, 'view' => 'payment'), 'access' => null, 'children' => array(),
                     'condition' => payment_enabled()),
                 array('title' => translate('event_cancel_signup'), 'link' => array('page' => 'event', 'id' => $id, 'view' => 'cancelsignup'), 'access' => null, 'children' => array(), 'condition' => @$_GET['view'] == 'cancelsignup'),
             )),
         ));
-
+	
         // It is possible to edit the titles of the event pages and add new custom pages; these
         // changes are taken care of by this call.
         page_customizeEventMenu((int) $id, $eventData);
 
-        $eventData['children'][] = array('title' => translate('event_rss'), 'link' => array('page' => 'eventrss', 'id' => $id, '_url_suffix' => '.rss'), 'access' => null, 'children' => array());
+
 
         // Event management links for TDs and admins
         $eventData['children'][] =
@@ -295,7 +306,7 @@ function page_getSubMenu()
             ));
 
         array_unshift($submenu['events']['children'], $eventData);
-    }
+   	}
 
     // Special case of dynamic behavior: username appears in the submenu when the user wants to view
     // the events a specific user has attented
@@ -415,6 +426,21 @@ function pdr_GetEventName($evid)
 
     return $event->name;
 }
+
+
+/**
+ * Simple wrapper to return event Level based on its id
+ */
+function pdr_GetEventLevel($evid)
+{
+    $event = GetEventDetails($evid);
+
+    if (!$event || is_a($event, 'Error'))
+        return '';
+
+    return $event->levelId;
+}
+
 
 
 /**

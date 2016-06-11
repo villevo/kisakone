@@ -44,7 +44,13 @@
         <th>{sortheading field=ClassName id=class sortType=alphabetical}</th>
         <th>{sortheading field=PDGA id=users_pdga sortType=integer}</th>
         {if $pdga_enabled}<th>{sortheading field=Rating id=pdga_rating sortType=integer}</th>{/if}
-    </tr>
+		
+		{if $event->isTD() || isadmin()} 				
+		 <th>{sortheading field=Maksu id=participants_list_payments sortType=integer}</th>
+		 <th>{sortheading field=Maksu id=participants_list_payments_marked sortType=integer}</th>
+		{/if}		 
+
+	</tr>
     {foreach from=$participants item=participant name=osallistuja}
     <tr>
         {assign var=country value=$participant.PDGACountry}
@@ -67,6 +73,10 @@
         <td><abbr title="{$participant.className|escape}">{$participant.classShort|escape}</abbr></td>
         <td>{$participant.player->pdga|escape}</td>
         {if $pdga_enabled}<td>{$participant.rating|escape}</td>{/if}
+		{if $event->isTD() || isadmin()} 
+		<td align="center">{ if $participant.eventFeePaid != null}<i class="fa fa-check green" aria-hidden="true"></i>{else} <i class="fa fa-times red" aria-hidden="true"></i>{/if}</td>
+		<td>{$participant.eventFeePaid|date_format:"%d.%m.%Y - %R"}</td>
+		{/if}
     </tr>
     {/foreach}
 </table>

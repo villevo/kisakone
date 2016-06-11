@@ -25,6 +25,17 @@
  <div id="event_content">
     {$page->formattedText}
 </div>
+{if $event->levelId == 2}
+	<div class="searcharea">
+		Viikkokisojen ilmoittautuminen ja kilpailumaksu suoritetaan paikan päällä ennen kilpailua.
+	</div>
+	{if $paid}
+		<p class="signup_status">{translate id=signed_up_and_paid}</p>
+		<ul>
+			<li><a href="{url page=event view=cancelsignup id=$smarty.get.id}">{translate id=cancel_signup}</a></li>
+		</ul>
+	{/if}
+{else}
 
 {if $admin}
     <div class="error">{translate id=admin_cant_sign_up}</div>
@@ -141,6 +152,8 @@
     {/foreach}
     </table>
 </div>
+{/if}
+
 {/if}
 
 {/if}
