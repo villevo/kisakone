@@ -610,7 +610,7 @@ function GetEventResultsWithoutHoles($eventid)
     $eventid = esc_or_null($eventid, 'int');
 
     $result = db_all("SELECT :Participation.*, player_id AS PlayerId, :Player.firstname AS FirstName,
-                            :Player.lastname AS LastName, :Player.pdga AS PDGANumber,
+                            :Player.lastname AS LastName, :User.Username, :Player.pdga AS PDGANumber,
                             :RoundResult.Result AS Total, :RoundResult.Penalty, :RoundResult.SuddenDeath,
                             :StartingOrder.GroupNumber, CumulativePlusminus, Completed,
                             :Classification.Short AS ClassName, PlusMinus, :StartingOrder.id AS StartId,

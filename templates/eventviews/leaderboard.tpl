@@ -79,7 +79,7 @@
     {translate id=preliminary_results}
 </p>
 <div class="results_raw">
-<table class="results">
+<table class="results narrow">
 {foreach from=$resultsByClass key=class item=results}
     <tr style="border: none">
         {math assign=colspan equation="5+x" x=$numRounds}
@@ -112,7 +112,7 @@
                     <th>{translate id=round_number_short number=$roundNumber}</th>
               <!--      <th>HCP{$roundNumber}</th> -->
                 {/foreach}
-                <th>{translate id=leaderboard_hole}</th>
+				{if $event->levelId != 2}<th>{translate id=leaderboard_hole}</th> {/if}
                 <th>+/-</th>
                 <th>{translate id=result_cumulative}</th>
                 {if $includePoints}
@@ -128,11 +128,14 @@
         {if !$country}{assign var=country value='FI'}{/if}
         <tr class="resultrow">
             <td id="r{$result.PlayerId}_pos">{$result.Standing}</td>
-            <td class="leftside"><span class="flag-icon flag-icon-{$country|lower}"></span>{$result.FirstName|escape|replace:' ':'&nbsp;'}&nbsp;{$result.LastName|escape|replace:' ':'&nbsp;'}</td>
+            <td class="leftside"> {if $result.Username}<a href="{url page=user id=$result.Username}">{$result.FirstName|escape|replace:' ':'&nbsp;'}&nbsp;{$result.LastName|escape|replace:' ':'&nbsp;'} </a>
+												{else}
+												{$result.FirstName|escape|replace:' ':'&nbsp;'}&nbsp;{$result.LastName|escape|replace:' ':'&nbsp;'} {/if}
+			</td>
 
             <td><abbr title="{$result.ClubLongName|escape}">{$result.ClubName|escape}</abbr></td>
 
-            <td>{$result.PDGANumber|escape}</td>
+            <td><a href="http://www.pdga.com/player/{$result.PDGANumber|escape}">{$result.PDGANumber|escape}</a></td>
             {if $pdga_enabled}
             <td>{$result.Rating|escape}</td>
             {/if}
@@ -145,7 +148,7 @@
              <!--   <td>{$result.Results.$roundid.RoundedHandicap} ({$result.Results.$roundid.CalculatedHandicap})</td> -->
             {/foreach}
 
-            <td id="r{$result.PlayerId}_tc">{$result.TotalCompleted}</td>
+			{if $event->levelId != 2}<td id="r{$result.PlayerId}_tc">{$result.TotalCompleted}</td>{/if}
 
             <td id="r{$result.PlayerId}_pm">{if $result.DidNotFinish}DNF{else}{$result.TotalPlusminus}{/if}</td>
             <td id="r{$result.PlayerId}_t">{if $result.DidNotFinish}DNF{else}{$result.OverallResult}{/if}</td>
@@ -210,7 +213,8 @@
 		
             <tr class="thr">
                 <th>{translate id=result_pos}</th>
-                <th>{translate id=result_name}</th>
+                <th>{translate id=result_name}
+				</th>
                 {if $sfl_enabled}
                 <th>{translate id=clubname}</th>
                 {/if}
@@ -239,11 +243,14 @@
         {if !$country}{assign var=country value='FI'}{/if}
         <tr class="resultrow">
             <td id="r{$result.PlayerId}_pos">{$result.HCPStanding}</td>
-            <td class="leftside"><span class="flag-icon flag-icon-{$country|lower}"></span>{$result.FirstName|escape|replace:' ':'&nbsp;'}&nbsp;{$result.LastName|escape|replace:' ':'&nbsp;'}</td>
+            <td class="leftside">{if $result.Username}<a href="{url page=user id=$result.Username}">{$result.FirstName|escape|replace:' ':'&nbsp;'}&nbsp;{$result.LastName|escape|replace:' ':'&nbsp;'} </a>
+											  {else}
+											  {$result.FirstName|escape|replace:' ':'&nbsp;'}&nbsp;{$result.LastName|escape|replace:' ':'&nbsp;'} {/if}
+											</td>
             {if $sfl_enabled}
             <td>{$result.ClubName|escape}</td>
             {/if}
-            <td>{$result.PDGANumber|escape}</td>
+            <td><a href="http://www.pdga.com/player/{$result.PDGANumber|escape}">{$result.PDGANumber|escape}</a></td>
             {if $pdga_enabled}
             <td>{$result.Rating|escape}</td>
             {/if}

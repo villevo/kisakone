@@ -64,7 +64,7 @@ Pelaajalta {$userinfo->fullname|escape} löytyy <b>{$hcpinfo.found|escape}</b> k
 			<td></td>			
 			<td class="nowrap table_hcp_events_hcp">{if $event->hcp_used > 0 }+{/if}{$event->rounded_hcp_used|escape} ({if $event->hcp_used > 0 }+{/if}{$event->hcp_used|escape})</td>
 			
-			<td class="nowrap table_hcp_events_hcp"><abbr class="player_abbr"title="Laskettu kaavalla: ({$event->score|escape} - {$event->courserating|escape}) * (80 / {$event->courseslope|escape})">{if $event->round_hcp > 0 }+{/if}{$event->round_hcp|escape}</abbr></td>									
+			<td class="nowrap table_hcp_events_hcp"><abbr class="player_abbr"title="Laskettu kaavalla: ({$event->score|escape} - {$event->courserating|escape}) * (80 / {$event->courseslope|escape}) = {if $event->round_hcp > 0 }+{/if}{$event->round_hcp|escape}">{if $event->round_hcp > 0 }+{/if}{$event->round_hcp|escape}</abbr></td>									
 	
 			<td class="nowrap table_hcp_events_hcp">{$event->courserating|escape} / {$event->courseslope|escape}</td>			
 		

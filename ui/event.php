@@ -249,8 +249,9 @@ function InitializeSmartyVariables(&$smarty, $error)
             $view = 'leaderboard';
             $results_tmp = GetEventResultsWithoutHoles($event->id);
             $results = pdr_GroupByClasses($results_tmp);
+			
+	
             $results2 = pdr_GroupByClasses2(GetEventResultsWithoutHolesHCP($event->id));
-
             $scoresAssigned = null;
             foreach ($results as $class) {
                 foreach ($class as $item) {
