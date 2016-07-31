@@ -55,16 +55,16 @@ Pelaajalta {$userinfo->fullname|escape} löytyy <b>{$hcpinfo.found|escape}</b> k
                </span>
 				</td>
             <td class="nowrap">{$event->coursename|escape}</td>
-            <td style="text-align: center;">{$event->playedclass|escape}</td>
-            <td class="nowrap" style="text-align: center;">{$event->score|escape} ({if $event->scoreplusminus > 0 }+{/if}{$event->scoreplusminus|escape})</td>
+            <td style="text-align: center;" class="nowrap">{$event->playedclass|escape}</td>
+            <td class="nowrap" style="text-align: center;">{if $event->dnf == 1}DNF {else}{$event->score|escape} ({if $event->scoreplusminus > 0 }+{/if}{$event->scoreplusminus|escape}){/if}</td>
 			
-			<td><a href="{url page='event' view=leaderboard id=$event->eid}">
+			<td class="nowrap"><a href="{url page='event' view=leaderboard id=$event->eid}">
                     <img src="{$url_base}images/trophyIcon.png" alt="{translate id=results_available}" title="{translate id=results_available}"/>  {$event->standing}. sija</a>
 			</td>
 			<td></td>			
 			<td class="nowrap table_hcp_events_hcp">{if $event->hcp_used > 0 }+{/if}{$event->rounded_hcp_used|escape} ({if $event->hcp_used > 0 }+{/if}{$event->hcp_used|escape})</td>
 			
-			<td class="nowrap table_hcp_events_hcp"><abbr class="player_abbr"title="Laskettu kaavalla: ({$event->score|escape} - {$event->courserating|escape}) * (80 / {$event->courseslope|escape}) = {if $event->round_hcp > 0 }+{/if}{$event->round_hcp|escape}">{if $event->round_hcp > 0 }+{/if}{$event->round_hcp|escape}</abbr></td>									
+			<td class="nowrap table_hcp_events_hcp">{if $event->dnf == 1}- {else}<abbr class="player_abbr"title="Laskettu kaavalla: ({$event->score|escape} - {$event->courserating|escape}) * (80 / {$event->courseslope|escape}) = {if $event->round_hcp > 0 }+{/if}{$event->round_hcp|escape}">{if $event->round_hcp > 0 }+{/if}{$event->round_hcp|escape}</abbr>{/if}</td>									
 	
 			<td class="nowrap table_hcp_events_hcp">{$event->courserating|escape} / {$event->courseslope|escape}</td>			
 		

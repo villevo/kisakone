@@ -681,7 +681,7 @@ function GetEventResultsWithoutHoles($eventid)
     		$standings[$hcpsorted[$i]['HCPJoinClass']]++;
     	}
     	
-    	if ($i > 0 && $hcpsorted[$i]['HandicappedTotal'] == $hcpsorted[$i-1]['HandicappedTotal']) {
+    	if ($i > 0 && $hcpsorted[$i]['HandicappedTotal'] == $hcpsorted[$i-1]['HandicappedTotal'] OR ( $i > 0 && $hcpsorted[$i]['DNF'] == $hcpsorted[$i-1]['DNF'] && $hcpsorted[$i]['DNF'] ==  1)) {
     		$retValue[$row]['HCPStanding'] = $retValue[$prevrow]['HCPStanding'];
     	} else {
     		$retValue[$row]['HCPStanding'] = $standings[$hcpsorted[$i]['HCPJoinClass']];
@@ -1011,48 +1011,47 @@ $playerid =   $player->id;
 
 	
         $result = db_all("
-				SELECT
+SELECT
+:Player.lastname,		
 :Event.id as eid,
 :Round.StartTime as roundtime,
 :Event.Name as eventname,
 :Classification.Short as playedclass,
 :Participation.OverallResult as score,
+:Participation.DidNotFinish as dnf,
 :RoundResult.PlusMinus as scoreplusminus,
 :Participation.Standing as standing,
 :RoundResultHandicap.Handicap as round_hcp,
 :Course.Name as coursename,
 :CourseRating.Rating as courserating,
 :CourseRating.Slope as courseslope
+
 FROM
-:Player,
-:Participation,
-:Event,
-:Course,
-:CourseRating,
-:Round,
-:RoundResult,
-:RoundResultHandicap,
-:Classification
+:Player
+
+LEFT JOIN :Participation ON :Participation.Player = :Player.player_id 
+
+LEFT JOIN :Event ON :Participation.Event = :Event.id
+
+LEFT JOIN :Round ON :Round.Event = :Event.id
+
+LEFT JOIN :RoundResult ON :Round.id = :RoundResult.Round 
+
+LEFT JOIN :RoundResultHandicap ON :RoundResultHandicap.RoundResult = :RoundResult.id
+
+LEFT JOIN :Classification ON :Classification.id = :Participation.Classification
+
+LEFT JOIN :Course ON :Course.id = :Round.Course
+
+Inner JOIN :CourseRating ON :CourseRating.Course = :Course.id
+
 WHERE
-:Participation.Player = $playerid
-AND
-:Participation.Player = :Player.player_id
-AND
-:Participation.Event = :Event.id
-AND
-:Round.Event = :Event.id
-AND
-:RoundResult.Round = :Round.id
+:Player.player_id = $playerid
 AND
 :RoundResult.Player = $playerid
 AND
-:RoundResultHandicap.RoundResult = :RoundResult.id
-AND 
-:Course.id = :Round.Course
-AND
-:CourseRating.Course = :Course.id
-AND
-:Classification.id = :Participation.Classification
+:CourseRating.Rating != 0
+
 ORDER BY
 roundtime
 ");
@@ -1063,15 +1062,18 @@ roundtime
     $retValue = array();
 	
     foreach ($result as $row) {
+
+		
 		$row['hcp_used'] = number_format(CalculatePlayerHandicap($playerid,$row['roundtime']),1,'.','');
 		$row['rounded_hcp_used'] = round($row['hcp_used'],0);
 		$row['round_hcp'] = number_format($row['round_hcp'], 1, '.', '');
 		
 		
         $retValue[] = new Event($row);
-		}
 		
-		/*echo "<pre>";
+	}
+		/*
+		echo "<pre>";
 		print_r($retValue);
 		echo "</pre>";
 		*/

@@ -52,7 +52,22 @@ function data_string_in_array($string, $array)
 }
 
 function data_sort_hcp($a,$b) {
-	if($a['DidNotFinish'] == 1) return 1;
+	
+	
+	$dnfa =  $a['DidNotFinish'];
+    $dnfb =  $b['DidNotFinish'];
+	
+    if ($dnfa != $dnfb) {
+        if ($dnfa)
+            return 1;
+        return - 1;
+    }
+	
+	    // If no differences in results detected,
+    // use calculated handicap to sort. Higher
+    // handicap wins because has better round compared 
+    // to handicap.    
+
 	// if tie, we need lots of checks	
 	if($a['HandicappedTotal'] == $b['HandicappedTotal']) {
 		// if same rounded handicap, we need to check calculated (with a decimal) handicap
@@ -71,6 +86,9 @@ function data_sort_hcp($a,$b) {
 	}	
 	return 1;
 }
+
+
+
 
 function data_sort_leaderboard($a, $b)
 {

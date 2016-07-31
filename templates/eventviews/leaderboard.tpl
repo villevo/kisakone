@@ -73,7 +73,10 @@
     <a href="{$pdgaUrl}">{translate id=event_pdga_results_url}</a>
 </div>
 {/if}
-
+<!-- Jyli Handicap: Show Handicapped results -->
+{if $event->levelId == 2}
+Tasatulokset järjestetty suurimmasta tasoituksesta pienimpään
+{/if}
 {assign var=extrahead value=$xtrahead}
 <p class="preliminary" style="display: none">
     {translate id=preliminary_results}
@@ -198,12 +201,18 @@
                 <td style="height: 8px; background-color: white;"></td>
             </tr>
 		
-		
-		     <tr class="thr">
-                <th colspan=4 style="height: 8px; background-color: white;"></th>
+			<tr class="thr">
+                <th colspan=3 style="height: 8px; background-color: white;"></th>
                 
-			<!-- <th>{translate id=leaderboard_hole}</th> -->
-                <th colspan=3> &#x25BC;&#8194;&#8194;&#8194; HCP &#8194;&#8194;&#8194;&#x25BC;</th>
+
+                <th colspan=4> &#x25BC;&#8194;&#8194;&#8194; HCP &#8194;&#8194;&#8194;&#x25BC;</th>
+
+            </tr>
+		     <tr class="thr">
+                <th colspan=3 style="height: 8px; background-color: white;"></th>
+                
+
+                <th colspan=4> Tulos - Tasoitus = Tasoitettu tulos</th>
 
             </tr>
 			
